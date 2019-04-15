@@ -16,7 +16,7 @@ CREATE TABLE MusiCrowd.Utilisateur (
 	nom varchar(255) NOT NULL,
 	prenom varchar(255) NOT NULL,
 	adresse varchar(255) NOT NULL,
-	telephone varchar(255) NOT NULL,
+	telephone varchar(255) NOT NULL UNIQUE,
 	mail varchar(255) NOT NULL,
 	rib varchar(255) UNIQUE,
 	nb_projet_supportes INT,
