@@ -6,10 +6,10 @@ INSERT INTO MusiCrowd.Utilisateur (mdp, nom, prenom, adresse, telephone, mail, r
 INSERT INTO MusiCrowd.Utilisateur (mdp, nom, prenom, adresse, telephone, mail, rib, nb_projet_supportes, nb_projet_crees) VALUES ('mot6passe', 'Jurski', 'Yan', '10 rue Thomas Mann', '0789235646', 'jurski@irif.fr', NULL, 0, 0);
 
 
-INSERT INTO MusiCrowd.Projet (user_id, nom_proj, description, date_deb, date_fin, objectif, somme_recoltee, taxe_perc) VALUES (1, 'boite de musique à manger', 'manger la musique au lieu de l écouter', NOW(), '2019-05-26', 200000, 0, 10);
-INSERT INTO MusiCrowd.Projet (user_id, nom_proj, description, date_deb, date_fin, objectif, somme_recoltee, taxe_perc) VALUES (2, 'Music 4 the Proo', 'musique pour les pro ps4 only', '2019-05-15', '2019-05-23', 2000, 0, 50);
-INSERT INTO MusiCrowd.Projet (user_id, nom_proj, description, date_deb, date_fin, objectif, somme_recoltee, taxe_perc) VALUES (1, 'guitare pour les manchots', 'pour que la musique soit accessible à tous', NOW(), '2019-05-10', 1000000, 0, 5);
-INSERT INTO MusiCrowd.Projet (user_id, nom_proj, description, date_deb, date_fin, objectif, somme_recoltee, taxe_perc) VALUES (2, 'Music 3 the Proo', 'musique pour les amateurs', NOW(), '2019-05-1', 300000, 0, 15);
+INSERT INTO MusiCrowd.Projet (user_id, nom_proj, description, date_deb, date_fin, objectif, somme_recoltee, taxe_perc, termine) VALUES (1, 'boite de musique à manger', 'manger la musique au lieu de l écouter', NOW(), '2019-05-26', 200000, 0, 10, 0);
+INSERT INTO MusiCrowd.Projet (user_id, nom_proj, description, date_deb, date_fin, objectif, somme_recoltee, taxe_perc, termine) VALUES (2, 'Music 4 the Proo', 'musique pour les pro ps4 only', '2019-05-15', '2019-05-23', 2000, 0, 50, 0);
+INSERT INTO MusiCrowd.Projet (user_id, nom_proj, description, date_deb, date_fin, objectif, somme_recoltee, taxe_perc, termine) VALUES (1, 'guitare pour les manchots', 'pour que la musique soit accessible à tous', NOW(), '2019-05-10', 1000000, 0, 5, 0);
+INSERT INTO MusiCrowd.Projet (user_id, nom_proj, description, date_deb, date_fin, objectif, somme_recoltee, taxe_perc, termine) VALUES (2, 'Music 3 the Proo', 'musique pour les amateurs', NOW(), '2019-05-1', 300000, 0, 15, 0);
 
 
 INSERT INTO MusiCrowd.Reward (projet_id, nom_cadeau, detail_cadeau, somme_min, somme_max) VALUES (1, 'Reconnaissance', 'reconnaissance éternelle du dieu de la guitare: Splash', 10, 400);
@@ -27,3 +27,25 @@ INSERT INTO MusiCrowd.Reward (projet_id, nom_cadeau, detail_cadeau, somme_min, s
 INSERT INTO MusiCrowd.Reward (projet_id, nom_cadeau, detail_cadeau, somme_min, somme_max) VALUES (4, 'une virée', 'une virée en F1 avec Splash aux commandes', 100, 400);
 INSERT INTO MusiCrowd.Reward (projet_id, nom_cadeau, detail_cadeau, somme_min, somme_max) VALUES (4, 'un chapeau', 'LE chapeau de Splash', 400, 1000);
 INSERT INTO MusiCrowd.Reward (projet_id, nom_cadeau, detail_cadeau, somme_min, somme_max) VALUES (4, 'LA guitare', 'LA GUITARE DE SPLASH DÉDICACÉE par un pinguoin', 1000, 30000);
+
+
+INSERT INTO MusiCrowd.Participation (user_id, projet_id, reward_id, montant, date_p) VALUES ();
+INSERT INTO MusiCrowd.Participation (user_id, projet_id, reward_id, montant, date_p) VALUES ();
+INSERT INTO MusiCrowd.Participation (user_id, projet_id, reward_id, montant, date_p) VALUES ();
+INSERT INTO MusiCrowd.Participation (user_id, projet_id, reward_id, montant, date_p) VALUES ();
+INSERT INTO MusiCrowd.Participation (user_id, projet_id, reward_id, montant, date_p) VALUES ();
+INSERT INTO MusiCrowd.Participation (user_id, projet_id, reward_id, montant, date_p) VALUES ();
+INSERT INTO MusiCrowd.Participation (user_id, projet_id, reward_id, montant, date_p) VALUES ();
+INSERT INTO MusiCrowd.Participation (user_id, projet_id, reward_id, montant, date_p) VALUES ();
+INSERT INTO MusiCrowd.Participation (user_id, projet_id, reward_id, montant, date_p) VALUES ();
+INSERT INTO MusiCrowd.Participation (user_id, projet_id, reward_id, montant, date_p) VALUES ();
+INSERT INTO MusiCrowd.Participation (user_id, projet_id, reward_id, montant, date_p) VALUES ();
+INSERT INTO MusiCrowd.Participation (user_id, projet_id, reward_id, montant, date_p) VALUES ();
+INSERT INTO MusiCrowd.Participation (user_id, projet_id, reward_id, montant, date_p) VALUES ();
+INSERT INTO MusiCrowd.Participation (user_id, projet_id, reward_id, montant, date_p) VALUES ();
+INSERT INTO MusiCrowd.Participation (user_id, projet_id, reward_id, montant, date_p) VALUES ();
+INSERT INTO MusiCrowd.Participation (user_id, projet_id, reward_id, montant, date_p) VALUES ();
+INSERT INTO MusiCrowd.Participation (user_id, projet_id, reward_id, montant, date_p) VALUES ();
+INSERT INTO MusiCrowd.Participation (user_id, projet_id, reward_id, montant, date_p) VALUES ();
+INSERT INTO MusiCrowd.Participation (user_id, projet_id, reward_id, montant, date_p) VALUES ();
+INSERT INTO MusiCrowd.Participation (user_id, projet_id, reward_id, montant, date_p) VALUES ();

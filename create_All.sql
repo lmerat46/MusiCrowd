@@ -34,7 +34,7 @@ CREATE TABLE MusiCrowd.Projet (
 	objectif INT,
 	somme_recoltee INT,
 	taxe_perc INT NOT NULL,
-	somme_percue INT,
+	termine BOOLEAN,
 	PRIMARY KEY(projet_id),
 	FOREIGN KEY(user_id) REFERENCES MusiCrowd.Utilisateur(user_id),
 	CHECK (date_deb >= date(NOW())),
