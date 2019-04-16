@@ -1,5 +1,7 @@
 DROP TABLE IF EXISTS MusiCrowd.Participation;
 DROP TABLE IF EXISTS MusiCrowd.Reward;
+DROP TABLE IF EXISTS MusiCrowd.Sponsor;
+DROP TABLE IF EXISTS MusiCrowd.Genre;
 DROP TABLE IF EXISTS MusiCrowd.Projet;
 DROP TABLE IF EXISTS MusiCrowd.Utilisateur;
 
@@ -26,7 +28,8 @@ CREATE TABLE MusiCrowd.Utilisateur (
 
 CREATE TABLE MusiCrowd.Projet (
 	projet_id SERIAL,
-	user_id SERIAL,
+	groupe_id SERIAL,
+	sponsor_id SERIAL,
 	nom_proj varchar(255) NOT NULL UNIQUE,
 	description varchar(255) NOT NULL,
 	date_deb date NOT NULL,
@@ -36,7 +39,8 @@ CREATE TABLE MusiCrowd.Projet (
 	taxe_perc INT NOT NULL,
 	termine BOOLEAN,
 	PRIMARY KEY(projet_id),
-	FOREIGN KEY(user_id) REFERENCES MusiCrowd.Utilisateur(user_id),
+	FOREIGN KEY(groupe_id) REFERENCES MusiCrowd.Groupe(groupe_id),
+	FOREIGN KEY(sponsor_id) REFERENCES MusiCrowd(sponsor_id),
 	CHECK (date_deb >= date(NOW())),
 	CHECK (date_deb < date_fin),
 	CHECK (date_fin > date_deb),
@@ -71,7 +75,29 @@ CREATE TABLE MusiCrowd.Participation (
 	CHECK (montant > 0)
 );
 
+CREATE TABLE MusiCrowd.Sponsor (
+	sponsor_id SERIAL,
+	nom varchar(255),
+	PRIMARY KEY(sponsor_id)
+);
+
+CREATE TABLE MusiCrowd.Groupe (
+	groupe_id SERIAL NOT NULL,
+	sponsor_id SERIAL,
+	nom varchar(255) NOT NULL UNIQUE,
+	PRIMARY KEY(groupe_id),
+	FOREIGN KEY(sponsor_id) REFERENCES MusiCrowd.Sponsor(sponsor_id)
+
+
+);
+
+CREATE TABLE MusiCrowd.Genre (
+	nom,
+	PRIMARY KEY(nom)
+);
+
 
 --CREATE TABLE MusiCrowd.Archive (
-
+--	archive_id SERIAL NOT NULL,
+--	projet_id SERIAL,
 --);
