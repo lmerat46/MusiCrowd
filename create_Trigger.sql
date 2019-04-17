@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION check_objectif_atteint() RETURNS trigger AS $$
+/*CREATE OR REPLACE FUNCTION check_objectif_atteint() RETURNS trigger AS $$
 DECLARE
 total numeric;
 BEGIN
@@ -17,5 +17,23 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER pas_plus_de_1000
 BEFORE UPDATE ON MusiCRowd.Projet
 FOR EACH ROW
-EXECUTE PROCEDURE check_objectif_atteint();
+EXECUTE PROCEDURE check_objectif_atteint();*/
+*/
 
+CREATE OR REPLACE FUNCTION "musicrowd"."onCompletion"()
+  RETURNS "pg_catalog"."trigger" AS $BODY$ 
+	DECLARE projID INT;
+	BEGIN
+  -- Routine body goes here...
+	SELECT INTO projID projet_id FROM projet WHERE NEW.somme_recoltee >= objectif;
+	UPDATE projet SET termine = TRUE WHERE projet_id = projID;
+	RETURN NEW;
+END
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100
+
+
+CREATE TRIGGER "OnComplete_trigg" AFTER UPDATE OF "objectif", "somme_recoltee" ON "musicrowd"."projet"
+FOR EACH ROW
+EXECUTE PROCEDURE "musicrowd"."onCompletion"();
