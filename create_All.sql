@@ -40,20 +40,15 @@ CREATE TABLE MusiCrowd.Genre (
 
 CREATE TABLE MusiCrowd.Groupe (
 	groupe_id SERIAL NOT NULL,
-	sponsor_id SERIAL,
-	genre_nom varchar(255),
 	nom varchar(255) NOT NULL UNIQUE,
-	PRIMARY KEY(groupe_id),
-	FOREIGN KEY(sponsor_id) REFERENCES MusiCrowd.Sponsor(sponsor_id),
-	FOREIGN KEY(genre_nom) REFERENCES MusiCrowd.Genre(nom)
-
-
+	PRIMARY KEY(groupe_id)
 );
 
 CREATE TABLE MusiCrowd.Projet (
 	projet_id SERIAL,
-	groupe_id SERIAL,
-	sponsor_id SERIAL,
+	user_id SERIAL NOT NULL,
+	--genre_nom varchar(255),
+	--sponsor_id SERIAL,
 	nom_proj varchar(255) NOT NULL UNIQUE,
 	description varchar(255) NOT NULL,
 	date_deb date NOT NULL,
@@ -63,8 +58,9 @@ CREATE TABLE MusiCrowd.Projet (
 	taxe_perc INT NOT NULL,
 	termine BOOLEAN,
 	PRIMARY KEY(projet_id),
-	FOREIGN KEY(groupe_id) REFERENCES MusiCrowd.Groupe(groupe_id),
-	FOREIGN KEY(sponsor_id) REFERENCES MusiCrowd.Sponsor(sponsor_id),
+	FOREIGN KEY(user_id) REFERENCES MusiCrowd.Utilisateur(user_id),
+	--FOREIGN KEY(sponsor_id) REFERENCES MusiCrowd.Sponsor(sponsor_id),
+	--FOREIGN KEY(genre_nom) REFERENCES MusiCrowd.Genre(nom),
 	CHECK (date_deb >= date(NOW())),
 	CHECK (date_deb < date_fin),
 	CHECK (date_fin > date_deb),
