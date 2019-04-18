@@ -40,11 +40,11 @@ EXECUTE PROCEDURE "musicrowd"."onCompletion"();
 
 CREATE OR REPLACE FUNCTION "musicrowd"."archivage"()
   RETURNS "pg_catalog"."trigger" AS $BODY$
-	DECLARE projetID INT;
+	DECLARE data Participation%ROWTYPE;
 	BEGIN
-	SELECT INTO projetID projet_id FROM participation p  WHERE p.projet_id = projet_id
+	SELECT * INTO data FROM Participation p  WHERE p.projet_id = projet_id
 	if termine  THEN
-		INSERT INTO archive VALUES(total.projet_id, total.user_id, total.reward_id, toal.date_p);
+		INSERT INTO archive VALUES(data.projet_id, data.user_id, data.reward_id, data.date_p);
 	ELSE RAISE NOTICE 'archivage impossible';
 	END IF;
 END
