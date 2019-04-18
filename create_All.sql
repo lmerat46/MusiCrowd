@@ -160,20 +160,6 @@ CREATE TABLE "musicrowd"."groupe" (
 ALTER TABLE "musicrowd"."groupe" OWNER TO "winstryke";
 
 -- ----------------------------
--- Table structure for participation
--- ----------------------------
-DROP TABLE IF EXISTS "musicrowd"."participation";
-CREATE TABLE "musicrowd"."participation" (
-  "user_id" int4 NOT NULL DEFAULT nextval('"musicrowd".participation_user_id_seq'::regclass),
-  "projet_id" int4 NOT NULL DEFAULT nextval('"musicrowd".participation_projet_id_seq'::regclass),
-  "reward_id" int4 NOT NULL DEFAULT nextval('"musicrowd".participation_reward_id_seq'::regclass),
-  "montant" int4,
-  "date_p" date NOT NULL
-)
-;
-ALTER TABLE "musicrowd"."participation" OWNER TO "winstryke";
-
--- ----------------------------
 -- Table structure for projet
 -- ----------------------------
 DROP TABLE IF EXISTS "musicrowd"."projet";
@@ -250,6 +236,24 @@ CREATE TABLE "musicrowd"."utilisateur" (
 ALTER TABLE "musicrowd"."utilisateur" OWNER TO "winstryke";
 
 -- ----------------------------
+-- Table structure for participation
+-- ----------------------------
+DROP TABLE IF EXISTS "musicrowd"."participation";
+CREATE TABLE "musicrowd"."participation" (
+  "user_id" int4 NOT NULL DEFAULT nextval('"musicrowd".participation_user_id_seq'::regclass),
+  "projet_id" int4 NOT NULL DEFAULT nextval('"musicrowd".participation_projet_id_seq'::regclass),
+  "reward_id" int4 NOT NULL DEFAULT nextval('"musicrowd".participation_reward_id_seq'::regclass),
+  "montant" int4,
+  "date_p" date NOT NULL
+)
+;
+ALTER TABLE "musicrowd"."participation" OWNER TO "winstryke";
+
+
+DROP SCHEMA IF EXISTS MusiCrowd;
+
+
+-- ----------------------------
 -- Alter sequences owned by
 -- ----------------------------
 ALTER SEQUENCE "musicrowd"."groupe_groupe_id_seq"
@@ -317,7 +321,6 @@ ALTER TABLE "musicrowd"."projet" ADD CONSTRAINT "projet_nom_proj_key" UNIQUE ("n
 -- Checks structure for table projet
 -- ----------------------------
 ALTER TABLE "musicrowd"."projet" ADD CONSTRAINT "projet_check1" CHECK ((date_fin > date_deb));
-ALTER TABLE "musicrowd"."projet" ADD CONSTRAINT "projet_date_deb_check" CHECK ((date_deb >= date(now())));
 ALTER TABLE "musicrowd"."projet" ADD CONSTRAINT "projet_objectif_check" CHECK ((objectif >= 1000));
 ALTER TABLE "musicrowd"."projet" ADD CONSTRAINT "projet_check" CHECK ((date_deb < date_fin));
 

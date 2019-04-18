@@ -18,7 +18,6 @@ CREATE TRIGGER pas_plus_de_1000
 BEFORE UPDATE ON MusiCRowd.Projet
 FOR EACH ROW
 EXECUTE PROCEDURE check_objectif_atteint();*/
-*/
 
 CREATE OR REPLACE FUNCTION "musicrowd"."onCompletion"()
   RETURNS "pg_catalog"."trigger" AS $BODY$ 
@@ -31,14 +30,14 @@ CREATE OR REPLACE FUNCTION "musicrowd"."onCompletion"()
 END
 $BODY$
   LANGUAGE plpgsql VOLATILE
-  COST 100
+COST 100;
 
 
 CREATE TRIGGER "OnComplete_trigg" AFTER UPDATE OF "objectif", "somme_recoltee" ON "musicrowd"."projet"
 FOR EACH ROW
 EXECUTE PROCEDURE "musicrowd"."onCompletion"();
 
-
+/*
 CREATE OR REPLACE FUNCTION "musicrowd"."archivage"(projet_id NUMERIC, termine BOOL)
   RETURNS "pg_catalog"."trigger" AS $BODY$
 	
@@ -62,3 +61,4 @@ $BODY$
 CREATE TRIGGER "onComplete_trigg_archivage" AFTER UPDATE OF "objectif", "somme_recoltee" ON "musicrowd"."projet"
 FOR EACH ROW
 EXECUTE PROCEDURE "musicrowd"."archivage"();
+*/
