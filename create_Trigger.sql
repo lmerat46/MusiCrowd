@@ -21,17 +21,17 @@ EXECUTE PROCEDURE check_objectif_atteint();*/
 
 CREATE OR REPLACE FUNCTION "musicrowd"."onCompletion"()
   RETURNS "pg_catalog"."trigger" AS $BODY$ 
-	DECLARE projID INT;
 	BEGIN
   -- Routine body goes here...
-	SELECT INTO projID projet_id FROM projet WHERE NEW.somme_recoltee >= objectif;
-	UPDATE projet SET termine = TRUE WHERE projet_id = projID;
-	RETURN NEW;
+	IF NEW.somme_recoltee >= OLD.objectif
+	THEN
+		UPDATE projet SET termine = TRUE WHERE projet_id = NEW.projet_id;
+		RETURN NEW; END IF;
+	RETURN NULL;
 END
 $BODY$
   LANGUAGE plpgsql VOLATILE
-COST 100;
-
+  COST 100;
 
 CREATE TRIGGER "OnComplete_trigg" AFTER UPDATE OF "objectif", "somme_recoltee" ON "musicrowd"."projet"
 FOR EACH ROW
