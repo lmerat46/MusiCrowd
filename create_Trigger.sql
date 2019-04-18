@@ -40,11 +40,12 @@ EXECUTE PROCEDURE "musicrowd"."onCompletion"();
 
 CREATE OR REPLACE FUNCTION "musicrowd"."archivage"()
   RETURNS "pg_catalog"."trigger" AS $BODY$
-	DECLARE data Participation%ROWTYPE;
+	DECLARE termineOK BOOL;
 	BEGIN
-	SELECT * INTO data FROM Participation p  WHERE p.projet_id = projet_id
-	if termine  THEN
-		INSERT INTO archive VALUES(data.projet_id, data.user_id, data.reward_id, data.date_p);
+	SELECT INTO termineOK termine FROM Projet p  WHERE p.projet_id = projet_id;
+	if termineOK  THEN
+		INSERT INTO archive VALUES(projet_id, user_id, reward_id, date_p);
+		DELETE FROM Participation p WHERE p.projet_id = projet_id AND p.user_id = user_id AND p.reward_id = reward_id;
 	ELSE RAISE NOTICE 'archivage impossible';
 	END IF;
 END
@@ -53,6 +54,6 @@ $BODY$
 
 
 
-CREATE TRIGGER "onComplete_trigg_archivage" AFTER UPDATE OF "objectif", "somme_recoltee" ON "musicrowd"."projet"
+CREATE TRIGGER "onComplete_trigg_archivage" AFTER INSERT  ON "musicrowd"."participation"
 FOR EACH ROW
 EXECUTE PROCEDURE "musicrowd"."archivage"();
