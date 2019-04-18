@@ -37,21 +37,16 @@ CREATE TRIGGER "OnComplete_trigg" AFTER UPDATE OF "objectif", "somme_recoltee" O
 FOR EACH ROW
 EXECUTE PROCEDURE "musicrowd"."onCompletion"();
 
-/*
-CREATE OR REPLACE FUNCTION "musicrowd"."archivage"(projet_id NUMERIC, termine BOOL)
+
+CREATE OR REPLACE FUNCTION "musicrowd"."archivage"()
   RETURNS "pg_catalog"."trigger" AS $BODY$
-	
+	DECLARE projetID INT;
 	BEGIN
-	total := SELECT * FROM participation p  WHERE p.projet_id = projet_id AND termine = TRUE;
-	if total IS NOT NULL THEN
-		--LOOP
-		--EXIT WHEN total IS NULL;
+	SELECT INTO projetID projet_id FROM participation p  WHERE p.projet_id = projet_id
+	if termine  THEN
 		INSERT INTO archive VALUES(total.projet_id, total.user_id, total.reward_id, toal.date_p);
-		--total := total.next?????
-		--END LOOP;
 	ELSE RAISE NOTICE 'archivage impossible';
 	END IF;
-	INSERT INTO archive VALUES ();
 END
 $BODY$
   LANGUAGE plpgsql VOLATILE
@@ -61,4 +56,3 @@ $BODY$
 CREATE TRIGGER "onComplete_trigg_archivage" AFTER UPDATE OF "objectif", "somme_recoltee" ON "musicrowd"."projet"
 FOR EACH ROW
 EXECUTE PROCEDURE "musicrowd"."archivage"();
-*/
