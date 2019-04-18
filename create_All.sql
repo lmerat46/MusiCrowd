@@ -12,10 +12,8 @@
  Target Server Version : 110002
  File Encoding         : 65001
 
- Date: 17/04/2019 16:48:42
+ Date: 18/04/2019 16:56:27
 */
-
-CREATE SCHEMA MusiCrowd;
 
 
 -- ----------------------------
@@ -127,6 +125,30 @@ CACHE 1;
 ALTER SEQUENCE "musicrowd"."sponsor_sponsor_id_seq" OWNER TO "winstryke";
 
 -- ----------------------------
+-- Sequence structure for sponsored_projects_id_projet_seq
+-- ----------------------------
+DROP SEQUENCE IF EXISTS "musicrowd"."sponsored_projects_id_projet_seq";
+CREATE SEQUENCE "musicrowd"."sponsored_projects_id_projet_seq" 
+INCREMENT 1
+MINVALUE  1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;
+ALTER SEQUENCE "musicrowd"."sponsored_projects_id_projet_seq" OWNER TO "winstryke";
+
+-- ----------------------------
+-- Sequence structure for sponsored_projects_id_sponsor_seq
+-- ----------------------------
+DROP SEQUENCE IF EXISTS "musicrowd"."sponsored_projects_id_sponsor_seq";
+CREATE SEQUENCE "musicrowd"."sponsored_projects_id_sponsor_seq" 
+INCREMENT 1
+MINVALUE  1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;
+ALTER SEQUENCE "musicrowd"."sponsored_projects_id_sponsor_seq" OWNER TO "winstryke";
+
+-- ----------------------------
 -- Sequence structure for utilisateur_user_id_seq
 -- ----------------------------
 DROP SEQUENCE IF EXISTS "musicrowd"."utilisateur_user_id_seq";
@@ -137,6 +159,19 @@ MAXVALUE 2147483647
 START 1
 CACHE 1;
 ALTER SEQUENCE "musicrowd"."utilisateur_user_id_seq" OWNER TO "winstryke";
+
+-- ----------------------------
+-- Table structure for archivage
+-- ----------------------------
+DROP TABLE IF EXISTS "musicrowd"."archivage";
+CREATE TABLE "musicrowd"."archivage" (
+  "projet_id" int4 NOT NULL,
+  "user_id" int4 NOT NULL,
+  "reward_id" int4 NOT NULL,
+  "date_p" date
+)
+;
+ALTER TABLE "musicrowd"."archivage" OWNER TO "winstryke";
 
 -- ----------------------------
 -- Table structure for genre
@@ -158,6 +193,20 @@ CREATE TABLE "musicrowd"."groupe" (
 )
 ;
 ALTER TABLE "musicrowd"."groupe" OWNER TO "winstryke";
+
+-- ----------------------------
+-- Table structure for participation
+-- ----------------------------
+DROP TABLE IF EXISTS "musicrowd"."participation";
+CREATE TABLE "musicrowd"."participation" (
+  "user_id" int4 NOT NULL DEFAULT nextval('"musicrowd".participation_user_id_seq'::regclass),
+  "projet_id" int4 NOT NULL DEFAULT nextval('"musicrowd".participation_projet_id_seq'::regclass),
+  "reward_id" int4 NOT NULL DEFAULT nextval('"musicrowd".participation_reward_id_seq'::regclass),
+  "montant" int4,
+  "date_p" date NOT NULL
+)
+;
+ALTER TABLE "musicrowd"."participation" OWNER TO "winstryke";
 
 -- ----------------------------
 -- Table structure for projet
@@ -217,6 +266,18 @@ CREATE TABLE "musicrowd"."sponsor_type" (
 ALTER TABLE "musicrowd"."sponsor_type" OWNER TO "winstryke";
 
 -- ----------------------------
+-- Table structure for sponsored_projects
+-- ----------------------------
+DROP TABLE IF EXISTS "musicrowd"."sponsored_projects";
+CREATE TABLE "musicrowd"."sponsored_projects" (
+  "id_projet" int4 NOT NULL DEFAULT nextval('"musicrowd".sponsored_projects_id_projet_seq'::regclass),
+  "id_sponsor" int4 NOT NULL DEFAULT nextval('"musicrowd".sponsored_projects_id_sponsor_seq'::regclass),
+  "sponsoring_action" varchar(255) COLLATE "pg_catalog"."default" NOT NULL
+)
+;
+ALTER TABLE "musicrowd"."sponsored_projects" OWNER TO "winstryke";
+
+-- ----------------------------
 -- Table structure for utilisateur
 -- ----------------------------
 DROP TABLE IF EXISTS "musicrowd"."utilisateur";
@@ -236,22 +297,23 @@ CREATE TABLE "musicrowd"."utilisateur" (
 ALTER TABLE "musicrowd"."utilisateur" OWNER TO "winstryke";
 
 -- ----------------------------
--- Table structure for participation
+-- Function structure for onCompletion
 -- ----------------------------
-DROP TABLE IF EXISTS "musicrowd"."participation";
-CREATE TABLE "musicrowd"."participation" (
-  "user_id" int4 NOT NULL DEFAULT nextval('"musicrowd".participation_user_id_seq'::regclass),
-  "projet_id" int4 NOT NULL DEFAULT nextval('"musicrowd".participation_projet_id_seq'::regclass),
-  "reward_id" int4 NOT NULL DEFAULT nextval('"musicrowd".participation_reward_id_seq'::regclass),
-  "montant" int4,
-  "date_p" date NOT NULL
-)
-;
-ALTER TABLE "musicrowd"."participation" OWNER TO "winstryke";
-
-
-DROP SCHEMA IF EXISTS MusiCrowd;
-
+DROP FUNCTION IF EXISTS "musicrowd"."onCompletion"();
+CREATE OR REPLACE FUNCTION "musicrowd"."onCompletion"()
+  RETURNS "pg_catalog"."trigger" AS $BODY$ 
+	BEGIN
+  -- Routine body goes here...
+	IF NEW.somme_recoltee >= OLD.objectif
+	THEN
+		UPDATE projet SET termine = TRUE WHERE projet_id = NEW.projet_id;
+		RETURN NEW; END IF;
+	RETURN NULL;
+END
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION "musicrowd"."onCompletion"() OWNER TO "winstryke";
 
 -- ----------------------------
 -- Alter sequences owned by
@@ -283,9 +345,20 @@ SELECT setval('"musicrowd"."reward_reward_id_seq"', 16, true);
 ALTER SEQUENCE "musicrowd"."sponsor_sponsor_id_seq"
 OWNED BY "musicrowd"."sponsor"."sponsor_id";
 SELECT setval('"musicrowd"."sponsor_sponsor_id_seq"', 2, false);
+ALTER SEQUENCE "musicrowd"."sponsored_projects_id_projet_seq"
+OWNED BY "musicrowd"."sponsored_projects"."id_projet";
+SELECT setval('"musicrowd"."sponsored_projects_id_projet_seq"', 2, false);
+ALTER SEQUENCE "musicrowd"."sponsored_projects_id_sponsor_seq"
+OWNED BY "musicrowd"."sponsored_projects"."id_sponsor";
+SELECT setval('"musicrowd"."sponsored_projects_id_sponsor_seq"', 2, false);
 ALTER SEQUENCE "musicrowd"."utilisateur_user_id_seq"
 OWNED BY "musicrowd"."utilisateur"."user_id";
 SELECT setval('"musicrowd"."utilisateur_user_id_seq"', 7, true);
+
+-- ----------------------------
+-- Primary Key structure for table archivage
+-- ----------------------------
+ALTER TABLE "musicrowd"."archivage" ADD CONSTRAINT "archivage_pkey" PRIMARY KEY ("projet_id", "user_id", "reward_id");
 
 -- ----------------------------
 -- Primary Key structure for table genre
@@ -313,6 +386,13 @@ ALTER TABLE "musicrowd"."participation" ADD CONSTRAINT "participation_montant_ch
 ALTER TABLE "musicrowd"."participation" ADD CONSTRAINT "participation_pkey" PRIMARY KEY ("user_id", "projet_id", "reward_id");
 
 -- ----------------------------
+-- Triggers structure for table projet
+-- ----------------------------
+CREATE TRIGGER "OnComplete_trigg" AFTER UPDATE OF "somme_recoltee", "objectif" ON "musicrowd"."projet"
+FOR EACH ROW
+EXECUTE PROCEDURE "musicrowd"."onCompletion"();
+
+-- ----------------------------
 -- Uniques structure for table projet
 -- ----------------------------
 ALTER TABLE "musicrowd"."projet" ADD CONSTRAINT "projet_nom_proj_key" UNIQUE ("nom_proj");
@@ -321,6 +401,7 @@ ALTER TABLE "musicrowd"."projet" ADD CONSTRAINT "projet_nom_proj_key" UNIQUE ("n
 -- Checks structure for table projet
 -- ----------------------------
 ALTER TABLE "musicrowd"."projet" ADD CONSTRAINT "projet_check1" CHECK ((date_fin > date_deb));
+ALTER TABLE "musicrowd"."projet" ADD CONSTRAINT "projet_date_deb_check" CHECK ((date_deb >= date(now())));
 ALTER TABLE "musicrowd"."projet" ADD CONSTRAINT "projet_objectif_check" CHECK ((objectif >= 1000));
 ALTER TABLE "musicrowd"."projet" ADD CONSTRAINT "projet_check" CHECK ((date_deb < date_fin));
 
@@ -352,6 +433,19 @@ ALTER TABLE "musicrowd"."sponsor" ADD CONSTRAINT "sponsor_pkey" PRIMARY KEY ("sp
 ALTER TABLE "musicrowd"."sponsor_type" ADD CONSTRAINT "sponsor_type_pkey" PRIMARY KEY ("sponsor_type_id");
 
 -- ----------------------------
+-- Indexes structure for table sponsored_projects
+-- ----------------------------
+CREATE INDEX "spons_proj__idx" ON "musicrowd"."sponsored_projects" USING btree (
+  "id_projet" "pg_catalog"."int4_ops" ASC NULLS LAST,
+  "id_sponsor" "pg_catalog"."int4_ops" ASC NULLS LAST
+);
+
+-- ----------------------------
+-- Primary Key structure for table sponsored_projects
+-- ----------------------------
+ALTER TABLE "musicrowd"."sponsored_projects" ADD CONSTRAINT "sponsored_projects_pkey" PRIMARY KEY ("id_projet", "id_sponsor");
+
+-- ----------------------------
 -- Uniques structure for table utilisateur
 -- ----------------------------
 ALTER TABLE "musicrowd"."utilisateur" ADD CONSTRAINT "utilisateur_telephone_key" UNIQUE ("telephone");
@@ -361,6 +455,13 @@ ALTER TABLE "musicrowd"."utilisateur" ADD CONSTRAINT "utilisateur_rib_key" UNIQU
 -- Primary Key structure for table utilisateur
 -- ----------------------------
 ALTER TABLE "musicrowd"."utilisateur" ADD CONSTRAINT "utilisateur_pkey" PRIMARY KEY ("user_id");
+
+-- ----------------------------
+-- Foreign Keys structure for table archivage
+-- ----------------------------
+ALTER TABLE "musicrowd"."archivage" ADD CONSTRAINT "projet_id_fk" FOREIGN KEY ("projet_id") REFERENCES "musicrowd"."projet" ("projet_id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "musicrowd"."archivage" ADD CONSTRAINT "reward_id" FOREIGN KEY ("reward_id") REFERENCES "musicrowd"."reward" ("reward_id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "musicrowd"."archivage" ADD CONSTRAINT "user_id_fk" FOREIGN KEY ("user_id") REFERENCES "musicrowd"."utilisateur" ("user_id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- ----------------------------
 -- Foreign Keys structure for table participation
@@ -383,3 +484,9 @@ ALTER TABLE "musicrowd"."reward" ADD CONSTRAINT "reward_projet_id_fkey" FOREIGN 
 -- Foreign Keys structure for table sponsor
 -- ----------------------------
 ALTER TABLE "musicrowd"."sponsor" ADD CONSTRAINT "sponsor_sponsor_type_id_fk" FOREIGN KEY ("sponsor_type_id") REFERENCES "musicrowd"."sponsor_type" ("sponsor_type_id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- ----------------------------
+-- Foreign Keys structure for table sponsored_projects
+-- ----------------------------
+ALTER TABLE "musicrowd"."sponsored_projects" ADD CONSTRAINT "id_projet_fk" FOREIGN KEY ("id_projet") REFERENCES "musicrowd"."projet" ("projet_id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "musicrowd"."sponsored_projects" ADD CONSTRAINT "id_sponsor_fk" FOREIGN KEY ("id_sponsor") REFERENCES "musicrowd"."sponsor" ("sponsor_id") ON DELETE CASCADE ON UPDATE CASCADE;
