@@ -1,25 +1,47 @@
-/*CREATE OR REPLACE FUNCTION check_objectif_atteint() RETURNS trigger AS $$
-DECLARE
-total numeric;
+/*
+ Navicat Premium Data Transfer
+
+ Source Server         : PgSQL
+ Source Server Type    : PostgreSQL
+ Source Server Version : 110002
+ Source Host           : localhost:5432
+ Source Catalog        : MusiCrowdDB
+ Source Schema         : musicrowd
+
+ Target Server Type    : PostgreSQL
+ Target Server Version : 110002
+ File Encoding         : 65001
+
+ Date: 18/04/2019 17:42:48
+*/
+
+-- ----------------------------
+-- Function structure for archivage
+-- ----------------------------
+DROP FUNCTION IF EXISTS "archivage"();
+CREATE OR REPLACE FUNCTION "archivage"()
+  RETURNS "pg_catalog"."trigger" AS $BODY$
+	DECLARE partici RECORD;
 BEGIN
-	IF date_fin = NOW() THEN 
-		CASE
-		WHEN somme_recoltee >= objectif THEN
-			INSERT INTO Archive VALUES();
-		ELSE
-			RAISE NOTICE 'Objectif non atteint';
-			RETURN NULL;
-	END IF;
-	
-END;
-$$ LANGUAGE plpgsql;
+	IF NEW.termine IS TRUE THEN
+		FOR partici IN SELECT * FROM musicrowd.participation pa WHERE pa.projet_id = NEW.projet_id
+		LOOP
+			INSERT INTO musicrowd.archivage VALUES(partici.projet_id, partici.user_id, partici.reward_id, partici.date_p);
+			DELETE FROM musicrowd.participation p WHERE p.projet_id = partici.projet_id AND p.user_id = partici.user_id AND p.reward_id = partici.reward_id;
+			RAISE NOTICE 'WAS HERE';
+		END LOOP;
+	ELSE RAISE NOTICE 'archivage impossible'; END IF;
+	RETURN NEW;
+END
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
 
-CREATE TRIGGER pas_plus_de_1000
-BEFORE UPDATE ON MusiCRowd.Projet
-FOR EACH ROW
-EXECUTE PROCEDURE check_objectif_atteint();*/
-
-CREATE OR REPLACE FUNCTION "musicrowd"."onCompletion"()
+-- ----------------------------
+-- Function structure for onCompletion
+-- ----------------------------
+DROP FUNCTION IF EXISTS "onCompletion"();
+CREATE OR REPLACE FUNCTION "onCompletion"()
   RETURNS "pg_catalog"."trigger" AS $BODY$ 
 	BEGIN
   -- Routine body goes here...
@@ -33,27 +55,13 @@ $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
 
-CREATE TRIGGER "OnComplete_trigg" AFTER UPDATE OF "objectif", "somme_recoltee" ON "musicrowd"."projet"
+-- ----------------------------
+-- Triggers structure for table projet
+-- ----------------------------
+CREATE TRIGGER "OnComplete_trigg" AFTER UPDATE OF "somme_recoltee", "objectif" ON "projet"
 FOR EACH ROW
 EXECUTE PROCEDURE "musicrowd"."onCompletion"();
-
-
-CREATE OR REPLACE FUNCTION "musicrowd"."archivage"()
-  RETURNS "pg_catalog"."trigger" AS $BODY$
-	DECLARE termineOK BOOL;
-	BEGIN
-	SELECT INTO termineOK termine FROM Projet p  WHERE p.projet_id = projet_id;
-	if termineOK  THEN
-		INSERT INTO archive VALUES(projet_id, user_id, reward_id, date_p);
-		DELETE FROM Participation p WHERE p.projet_id = projet_id AND p.user_id = user_id AND p.reward_id = reward_id;
-	ELSE RAISE NOTICE 'archivage impossible';
-	END IF;
-END
-$BODY$
-  LANGUAGE plpgsql VOLATILE
-
-
-
-CREATE TRIGGER "onComplete_trigg_archivage" AFTER INSERT  ON "musicrowd"."participation"
+CREATE TRIGGER "onComplete_trigg_archivage" AFTER UPDATE OF "termine" ON "projet"
 FOR EACH ROW
 EXECUTE PROCEDURE "musicrowd"."archivage"();
+
