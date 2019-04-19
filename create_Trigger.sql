@@ -56,6 +56,26 @@ $BODY$
   COST 100;
 
 -- ----------------------------
+-- Function structure for ajout_reward_participation
+-- ----------------------------
+DROP FUNCTION IF EXISTS "ajout_reward_participation"();
+CREATE OR REPLACE FUNCTION "ajout_reward_participation"()
+  RETURNS "pg_catalog"."trigger" AS $BODY$ 
+	DECLARE rewardID INT;
+	BEGIN
+  	IF NEW.user_id IS NULL THEN RETURN NULL; END IF;
+	IF NEW.projet_id IS NULL THEN RETURN NULL; END IF;
+	IF NEW.montant IS NULL THEN RETURN NULL; END IF;
+	SELECT INTO rewardID reward_id FROM musicrowd.reward r WHERE r.projet_id = NEW.projet_id AND NEW.montant >= r.somme_min AND NEW.montant <= somme_max;
+	NEW.reward_id = rewardID;
+	RETURN NEW;
+	
+END
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+
+-- ----------------------------
 -- Triggers structure for table projet
 -- ----------------------------
 CREATE TRIGGER "OnComplete_trigg" AFTER UPDATE OF "somme_recoltee", "objectif" ON "projet"
@@ -64,4 +84,7 @@ EXECUTE PROCEDURE "musicrowd"."onCompletion"();
 CREATE TRIGGER "onComplete_trigg_archivage" AFTER UPDATE OF "termine" ON "projet"
 FOR EACH ROW
 EXECUTE PROCEDURE "musicrowd"."archivage"();
+CREATE TRIGGER "OnParticipation_complete" BEFORE INSERT ON "participation"
+FOR EACH ROW
+EXECUTE PROCEDURE "musicrowd"."ajout_reward_participation"();
 
