@@ -15,6 +15,9 @@
  Date: 18/04/2019 16:56:27
 */
 
+DROP SCHEMA IF EXISTS musicrowd;
+CREATE SCHEMA musicrowd;
+
 
 -- ----------------------------
 -- Sequence structure for groupe_groupe_id_seq
@@ -297,25 +300,6 @@ CREATE TABLE "musicrowd"."utilisateur" (
 ALTER TABLE "musicrowd"."utilisateur" OWNER TO "winstryke";
 
 -- ----------------------------
--- Function structure for onCompletion
--- ----------------------------
-DROP FUNCTION IF EXISTS "musicrowd"."onCompletion"();
-CREATE OR REPLACE FUNCTION "musicrowd"."onCompletion"()
-  RETURNS "pg_catalog"."trigger" AS $BODY$ 
-	BEGIN
-  -- Routine body goes here...
-	IF NEW.somme_recoltee >= OLD.objectif
-	THEN
-		UPDATE projet SET termine = TRUE WHERE projet_id = NEW.projet_id;
-		RETURN NEW; END IF;
-	RETURN NULL;
-END
-$BODY$
-  LANGUAGE plpgsql VOLATILE
-  COST 100;
-ALTER FUNCTION "musicrowd"."onCompletion"() OWNER TO "winstryke";
-
--- ----------------------------
 -- Alter sequences owned by
 -- ----------------------------
 ALTER SEQUENCE "musicrowd"."groupe_groupe_id_seq"
@@ -384,13 +368,6 @@ ALTER TABLE "musicrowd"."participation" ADD CONSTRAINT "participation_montant_ch
 -- Primary Key structure for table participation
 -- ----------------------------
 ALTER TABLE "musicrowd"."participation" ADD CONSTRAINT "participation_pkey" PRIMARY KEY ("user_id", "projet_id", "reward_id");
-
--- ----------------------------
--- Triggers structure for table projet
--- ----------------------------
-CREATE TRIGGER "OnComplete_trigg" AFTER UPDATE OF "somme_recoltee", "objectif" ON "musicrowd"."projet"
-FOR EACH ROW
-EXECUTE PROCEDURE "musicrowd"."onCompletion"();
 
 -- ----------------------------
 -- Uniques structure for table projet
