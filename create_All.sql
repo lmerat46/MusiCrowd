@@ -288,34 +288,34 @@ CREATE TABLE "utilisateur_archivage" (
 -- ----------------------------
 ALTER SEQUENCE "participation_projet_id_seq"
 OWNED BY "participation"."projet_id";
-SELECT setval('"participation_projet_id_seq"', 2, false);
+SELECT setval('"participation_projet_id_seq"', 0, false);
 ALTER SEQUENCE "participation_user_id_seq"
 OWNED BY "participation"."user_id";
-SELECT setval('"participation_user_id_seq"', 2, false);
+SELECT setval('"participation_user_id_seq"', 0, false);
 ALTER SEQUENCE "projet_projet_id_seq"
 OWNED BY "projet"."projet_id";
-SELECT setval('"projet_projet_id_seq"', 7, true);
+SELECT setval('"projet_projet_id_seq"', 0, true);
 ALTER SEQUENCE "projet_user_id_seq"
 OWNED BY "projet"."user_id";
-SELECT setval('"projet_user_id_seq"', 2, false);
+SELECT setval('"projet_user_id_seq"', 0, false);
 ALTER SEQUENCE "reward_projet_id_seq"
 OWNED BY "reward"."projet_id";
-SELECT setval('"reward_projet_id_seq"', 2, false);
+SELECT setval('"reward_projet_id_seq"', 0, false);
 ALTER SEQUENCE "reward_reward_id_seq"
 OWNED BY "reward"."reward_id";
-SELECT setval('"reward_reward_id_seq"', 17, true);
+SELECT setval('"reward_reward_id_seq"', 0, true);
 ALTER SEQUENCE "sponsor_sponsor_id_seq"
 OWNED BY "sponsor"."sponsor_id";
-SELECT setval('"sponsor_sponsor_id_seq"', 2, false);
+SELECT setval('"sponsor_sponsor_id_seq"', 0, false);
 ALTER SEQUENCE "sponsored_projects_id_projet_seq"
 OWNED BY "sponsored_projects"."id_projet";
-SELECT setval('"sponsored_projects_id_projet_seq"', 2, false);
+SELECT setval('"sponsored_projects_id_projet_seq"', 0, false);
 ALTER SEQUENCE "sponsored_projects_id_sponsor_seq"
 OWNED BY "sponsored_projects"."id_sponsor";
-SELECT setval('"sponsored_projects_id_sponsor_seq"', 2, false);
+SELECT setval('"sponsored_projects_id_sponsor_seq"', 0, false);
 ALTER SEQUENCE "utilisateur_user_id_seq"
 OWNED BY "utilisateur"."user_id";
-SELECT setval('"utilisateur_user_id_seq"', 8, true);
+SELECT setval('"utilisateur_user_id_seq"', 0, true);
 
 -- ----------------------------
 -- Primary Key structure for table Fiction_Date

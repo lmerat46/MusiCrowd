@@ -54,6 +54,7 @@ DROP FUNCTION IF EXISTS "RibCheck"() CASCADE;
 CREATE OR REPLACE FUNCTION "RibCheck"()
   RETURNS "pg_catalog"."trigger" AS $BODY$
 	DECLARE ribb text;
+	DECLARE rec record;
 	BEGIN
   -- Routine body goes here...
 	SELECT INTO ribb rib FROM musicrowd.utilisateur WHERE utilisateur.user_id = NEW.user_id;
@@ -61,7 +62,14 @@ IF ribb IS NULL
 THEN
 RAISE NOTICE 'NO RIB BRO';
 RETURN NULL; END IF;
+SELECT * INTO rec FROM musicrowd.participation WHERE user_id = NEW.user_id AND projet_id = NEW.projet_id;
+IF rec IS NULL
+THEN
 RETURN NEW;
+ELSE
+UPDATE musicrowd.Participation SET montant = montant + NEW.montant, date_p = NEW.date_p WHERE user_id = NEW.user_id AND projet_id = NEW.projet_id;
+RETURN NULL;
+END IF;
 END
 $BODY$
   LANGUAGE plpgsql VOLATILE
