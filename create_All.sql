@@ -141,8 +141,8 @@ CREATE TABLE "Fiction_Date" (
 DROP TABLE IF EXISTS "Milestones" CASCADE;
 CREATE TABLE "Milestones" (
   "projet_id" int4 NOT NULL,
-  "Description" varchar(255) COLLATE "pg_catalog"."default",
-  "Objectif" int4,
+  "description" varchar(255) COLLATE "pg_catalog"."default",
+  "objectif" int4,
   "milsetone_id" int4 NOT NULL
 )
 ;
