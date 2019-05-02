@@ -119,22 +119,22 @@ $BODY$
 -- ----------------------------
 -- Triggers structure for table participation
 -- ----------------------------
-CREATE TRIGGER "OnUserParticipation_trigg" AFTER INSERT ON "participation"
+CREATE TRIGGER "OnUserParticipation_trigg" AFTER INSERT ON "musicrowd"."participation"
 FOR EACH ROW
 EXECUTE PROCEDURE "musicrowd"."OnUserParticipation"();
-CREATE TRIGGER "RibCheck_trigg" BEFORE INSERT ON "participation"
+CREATE TRIGGER "RibCheck_trigg" BEFORE INSERT ON "musicrowd"."participation"
 FOR EACH ROW
 EXECUTE PROCEDURE "musicrowd"."RibCheck"();
 
 -- ----------------------------
 -- Triggers structure for table projet
 -- ----------------------------
-CREATE TRIGGER "OnComplete_trigg" AFTER UPDATE OF "objectif", "somme_recoltee" ON "projet"
+CREATE TRIGGER "OnComplete_trigg" AFTER UPDATE OF "objectif", "somme_recoltee" ON "musicrowd"."projet"
 FOR EACH ROW
 EXECUTE PROCEDURE "musicrowd"."onCompletion"();
-CREATE TRIGGER "OnProjectCreation_trigg" AFTER INSERT ON "projet"
+CREATE TRIGGER "OnProjectCreation_trigg" AFTER INSERT ON "musicrowd"."projet"
 FOR EACH ROW
 EXECUTE PROCEDURE "musicrowd"."OnProjectCreation"();
-CREATE TRIGGER "onComplete_trigg_archivage" AFTER UPDATE OF "termine" ON "projet"
+CREATE TRIGGER "onComplete_trigg_archivage" AFTER UPDATE OF "termine" ON "musicrowd"."projet"
 FOR EACH ROW
 EXECUTE PROCEDURE "musicrowd"."archivage"();
