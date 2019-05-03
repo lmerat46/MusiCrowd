@@ -1,3 +1,5 @@
+INSERT INTO MusiCrowd."Fiction_Date" VALUES ('2016-05-18');
+
 INSERT INTO MusiCrowd.Utilisateur (mdp, nom, prenom, adresse, telephone, mail, rib, nb_projet_supportes, nb_projet_crees, balance, date_inscription, date_connexion) VALUES ('mot2passe', 'Merat', 'Laure', '184 rue de Tolbiac', '0666666666', 'laure.merat@etu.univ-paris-diderot.fr', 'FR45898676776796237H65', 0, 0, 2000, '2016-12-20', '2016-12-21');
 INSERT INTO MusiCrowd.Utilisateur (mdp, nom, prenom, adresse, telephone, mail, rib, nb_projet_supportes, nb_projet_crees, balance, date_inscription, date_connexion) VALUES ('mot1passe', 'Amari', 'Nabil', '5 rue Thomas Mann', '0777777777', 'nabil.amari@etu.univ-paris-diderot.fr', 'FR04399902978798786N65', 0, 0, 0, '2018-04-16', '2018-04-13');
 INSERT INTO MusiCrowd.Utilisateur (mdp, nom, prenom, adresse, telephone, mail, rib, nb_projet_supportes, nb_projet_crees, balance, date_inscription, date_connexion) VALUES ('mot3passe', 'Rogova', 'Alexandra', '124 rue de compans', '0677667766', 'alexandra.rogova@etu.univ-paris-diderot.fr', 'DE092897828762', 0, 0, 10000, '2017-09-19', '2018-02-16');
