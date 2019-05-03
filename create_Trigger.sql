@@ -117,6 +117,32 @@ $BODY$
   COST 100;
 
 -- ----------------------------
+-- Function structure for remboursement
+-- ----------------------------
+DROP FUNCTION IF EXISTS "remboursement"() CASCADE;
+CREATE OR REPLACE FUNCTION "remboursement"()
+  RETURNS "pg_catalog"."trigger" AS $BODY$ 
+	DECLARE partici RECORD;
+	BEGIN
+  -- Routine body goes here...
+	IF NEW.date_fin = (SELECT fiction_date FROM "musicrowd"."fiction_Date" WHERE NEW.termine = False)
+	THEN
+		FOR partici IN SELECT * FROM musicrowd.participation pa WHERE pa.projet_id = NEW.projet_id
+		LOOP
+			--BEGIN TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+			NEW.somme_recoltee = NEW.somme_recoltee - partici.montant;
+			UPDATE musicrowd.utilisateur SET balance = balance + partici.montant WHERE user_id = partici.user_id;
+			--COMMIT;
+		END LOOP;
+		-- DELETE PROJET OR archivage quand meme?
+		RETURN NEW;
+	END IF;
+END
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+
+-- ----------------------------
 -- Triggers structure for table participation
 -- ----------------------------
 CREATE TRIGGER "OnUserParticipation_trigg" AFTER INSERT ON "musicrowd"."participation"
@@ -138,3 +164,10 @@ EXECUTE PROCEDURE "musicrowd"."OnProjectCreation"();
 CREATE TRIGGER "onComplete_trigg_archivage" AFTER UPDATE OF "termine" ON "musicrowd"."projet"
 FOR EACH ROW
 EXECUTE PROCEDURE "musicrowd"."archivage"();
+CREATE TRIGGER "remboursement_trigg" AFTER UPDATE OF "termine" ON "musicrowd"."projet"
+FOR EACH ROW
+EXECUTE PROCEDURE "musicrowd"."remboursement"();
+
+
+
+
