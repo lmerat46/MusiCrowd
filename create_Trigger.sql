@@ -106,19 +106,18 @@ THEN
 RAISE EXCEPTION  'NO RIB BRO OR you are broke';
 RETURN NULL; 
 ELSIF balanceb >= NEW.montant THEN
-	UPDATE musicrowd.utilisateur SET balance = balance - NEW.montant WHERE utilisateur.user_id = NEW.user_id;
-	RETURN NEW;
-ELSE 
-	RAISE EXCEPTION 'NOT ENOUGH MONEY';
-	RETURN NULL;
-END IF;
-SELECT * INTO rec FROM musicrowd.participation WHERE user_id = NEW.user_id AND projet_id = NEW.projet_id;
+	SELECT * INTO rec FROM musicrowd.participation WHERE user_id = NEW.user_id AND projet_id = NEW.projet_id;
 IF rec IS NULL
 THEN
-RETURN NEW;
+UPDATE musicrowd.utilisateur SET balance = balance - NEW.montant WHERE utilisateur.user_id = NEW.user_id;
+	RETURN NEW;
 ELSE
 UPDATE musicrowd.Participation SET montant = montant + NEW.montant, date_p = NEW.date_p WHERE user_id = NEW.user_id AND projet_id = NEW.projet_id;
 RETURN NULL;
+END IF;
+ELSE 
+	RAISE EXCEPTION 'NOT ENOUGH MONEY';
+	RETURN NULL;
 END IF;
 END
 $BODY$
