@@ -12,7 +12,7 @@
  Target Server Version : 110002
  File Encoding         : 65001
 
- Date: 29/04/2019 18:17:22
+ Date: 03/05/2019 15:47:53
 */
 
 
@@ -22,7 +22,6 @@
 DROP SEQUENCE IF EXISTS "participation_projet_id_seq" CASCADE;
 CREATE SEQUENCE "participation_projet_id_seq" 
 INCREMENT 1
-MINVALUE  0
 MAXVALUE 2147483647
 START 1
 CACHE 1;
@@ -33,7 +32,6 @@ CACHE 1;
 DROP SEQUENCE IF EXISTS "participation_user_id_seq" CASCADE;
 CREATE SEQUENCE "participation_user_id_seq" 
 INCREMENT 1
-MINVALUE  0
 MAXVALUE 2147483647
 START 1
 CACHE 1;
@@ -44,7 +42,6 @@ CACHE 1;
 DROP SEQUENCE IF EXISTS "projet_projet_id_seq" CASCADE;
 CREATE SEQUENCE "projet_projet_id_seq" 
 INCREMENT 1
-MINVALUE  0
 MAXVALUE 2147483647
 START 1
 CACHE 1;
@@ -55,7 +52,6 @@ CACHE 1;
 DROP SEQUENCE IF EXISTS "projet_user_id_seq" CASCADE;
 CREATE SEQUENCE "projet_user_id_seq" 
 INCREMENT 1
-MINVALUE  0
 MAXVALUE 2147483647
 START 1
 CACHE 1;
@@ -66,7 +62,6 @@ CACHE 1;
 DROP SEQUENCE IF EXISTS "reward_projet_id_seq" CASCADE;
 CREATE SEQUENCE "reward_projet_id_seq" 
 INCREMENT 1
-MINVALUE  0
 MAXVALUE 2147483647
 START 1
 CACHE 1;
@@ -77,7 +72,6 @@ CACHE 1;
 DROP SEQUENCE IF EXISTS "reward_reward_id_seq" CASCADE;
 CREATE SEQUENCE "reward_reward_id_seq" 
 INCREMENT 1
-MINVALUE  0
 MAXVALUE 2147483647
 START 1
 CACHE 1;
@@ -88,7 +82,6 @@ CACHE 1;
 DROP SEQUENCE IF EXISTS "sponsor_sponsor_id_seq" CASCADE;
 CREATE SEQUENCE "sponsor_sponsor_id_seq" 
 INCREMENT 1
-MINVALUE  0
 MAXVALUE 2147483647
 START 1
 CACHE 1;
@@ -99,7 +92,6 @@ CACHE 1;
 DROP SEQUENCE IF EXISTS "sponsored_projects_id_projet_seq" CASCADE;
 CREATE SEQUENCE "sponsored_projects_id_projet_seq" 
 INCREMENT 1
-MINVALUE  0
 MAXVALUE 9223372036854775807
 START 1
 CACHE 1;
@@ -110,7 +102,6 @@ CACHE 1;
 DROP SEQUENCE IF EXISTS "sponsored_projects_id_sponsor_seq" CASCADE;
 CREATE SEQUENCE "sponsored_projects_id_sponsor_seq" 
 INCREMENT 1
-MINVALUE  0
 MAXVALUE 9223372036854775807
 START 1
 CACHE 1;
@@ -121,7 +112,6 @@ CACHE 1;
 DROP SEQUENCE IF EXISTS "utilisateur_user_id_seq" CASCADE;
 CREATE SEQUENCE "utilisateur_user_id_seq" 
 INCREMENT 1
-MINVALUE  0
 MAXVALUE 2147483647
 START 1
 CACHE 1;
@@ -288,34 +278,34 @@ CREATE TABLE "utilisateur_archivage" (
 -- ----------------------------
 ALTER SEQUENCE "participation_projet_id_seq"
 OWNED BY "participation"."projet_id";
-SELECT setval('"participation_projet_id_seq"', 0, false);
+SELECT setval('"participation_projet_id_seq"', 2, false);
 ALTER SEQUENCE "participation_user_id_seq"
 OWNED BY "participation"."user_id";
-SELECT setval('"participation_user_id_seq"', 0, false);
+SELECT setval('"participation_user_id_seq"', 2, false);
 ALTER SEQUENCE "projet_projet_id_seq"
 OWNED BY "projet"."projet_id";
-SELECT setval('"projet_projet_id_seq"', 0, true);
+SELECT setval('"projet_projet_id_seq"', 5, true);
 ALTER SEQUENCE "projet_user_id_seq"
 OWNED BY "projet"."user_id";
-SELECT setval('"projet_user_id_seq"', 0, false);
+SELECT setval('"projet_user_id_seq"', 2, false);
 ALTER SEQUENCE "reward_projet_id_seq"
 OWNED BY "reward"."projet_id";
-SELECT setval('"reward_projet_id_seq"', 0, false);
+SELECT setval('"reward_projet_id_seq"', 2, false);
 ALTER SEQUENCE "reward_reward_id_seq"
 OWNED BY "reward"."reward_id";
-SELECT setval('"reward_reward_id_seq"', 0, true);
+SELECT setval('"reward_reward_id_seq"', 16, true);
 ALTER SEQUENCE "sponsor_sponsor_id_seq"
 OWNED BY "sponsor"."sponsor_id";
-SELECT setval('"sponsor_sponsor_id_seq"', 0, false);
+SELECT setval('"sponsor_sponsor_id_seq"', 2, false);
 ALTER SEQUENCE "sponsored_projects_id_projet_seq"
 OWNED BY "sponsored_projects"."id_projet";
-SELECT setval('"sponsored_projects_id_projet_seq"', 0, false);
+SELECT setval('"sponsored_projects_id_projet_seq"', 2, false);
 ALTER SEQUENCE "sponsored_projects_id_sponsor_seq"
 OWNED BY "sponsored_projects"."id_sponsor";
-SELECT setval('"sponsored_projects_id_sponsor_seq"', 0, false);
+SELECT setval('"sponsored_projects_id_sponsor_seq"', 2, false);
 ALTER SEQUENCE "utilisateur_user_id_seq"
 OWNED BY "utilisateur"."user_id";
-SELECT setval('"utilisateur_user_id_seq"', 0, true);
+SELECT setval('"utilisateur_user_id_seq"', 6, true);
 
 -- ----------------------------
 -- Primary Key structure for table Fiction_Date

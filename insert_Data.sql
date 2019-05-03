@@ -42,13 +42,13 @@ INSERT INTO MusiCrowd.Participation (user_id, projet_id, montant, date_p) VALUES
 INSERT INTO MusiCrowd.Participation (user_id, projet_id, montant, date_p) VALUES (3, 4, 1000, '2019-05-01');
 
 
-INSERT INTO Musicrowd.Milestones (projet_id, description, objectif) VALUES ();
+/*INSERT INTO Musicrowd.Milestones (projet_id, description, objectif) VALUES ();
 
 
 INSERT INTO Musicrowd.sponsor (nom, sponsor_type_id) VALUES ();
 
 
 INSERT INTO Musicrowd.sponsor_type (sponsor_type_name) VALUES ();
-
+*/
 
 
