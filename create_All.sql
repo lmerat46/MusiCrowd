@@ -1,6 +1,7 @@
 -- ----------------------------
 -- Sequence structure for participation_projet_id_seq
 -- ----------------------------
+DROP SEQUENCE IF EXISTS "participation_projet_id_seq" CASCADE;
 CREATE SEQUENCE "participation_projet_id_seq" 
 INCREMENT 1
 MAXVALUE 2147483647
@@ -10,6 +11,7 @@ CACHE 1;
 -- ----------------------------
 -- Sequence structure for participation_user_id_seq
 -- ----------------------------
+DROP SEQUENCE IF EXISTS "participation_user_id_seq" CASCADE;
 CREATE SEQUENCE "participation_user_id_seq" 
 INCREMENT 1
 MAXVALUE 2147483647
@@ -19,6 +21,7 @@ CACHE 1;
 -- ----------------------------
 -- Sequence structure for projet_projet_id_seq
 -- ----------------------------
+DROP SEQUENCE IF EXISTS "projet_projet_id_seq" CASCADE;
 CREATE SEQUENCE "projet_projet_id_seq" 
 INCREMENT 1
 MAXVALUE 2147483647
@@ -28,6 +31,7 @@ CACHE 1;
 -- ----------------------------
 -- Sequence structure for projet_user_id_seq
 -- ----------------------------
+DROP SEQUENCE IF EXISTS "projet_user_id_seq" CASCADE;
 CREATE SEQUENCE "projet_user_id_seq" 
 INCREMENT 1
 MAXVALUE 2147483647
@@ -37,6 +41,7 @@ CACHE 1;
 -- ----------------------------
 -- Sequence structure for reward_projet_id_seq
 -- ----------------------------
+DROP SEQUENCE IF EXISTS "reward_projet_id_seq" CASCADE;
 CREATE SEQUENCE "reward_projet_id_seq" 
 INCREMENT 1
 MAXVALUE 2147483647
@@ -46,6 +51,7 @@ CACHE 1;
 -- ----------------------------
 -- Sequence structure for reward_reward_id_seq
 -- ----------------------------
+DROP SEQUENCE IF EXISTS "reward_reward_id_seq" CASCADE;
 CREATE SEQUENCE "reward_reward_id_seq" 
 INCREMENT 1
 MAXVALUE 2147483647
@@ -55,6 +61,7 @@ CACHE 1;
 -- ----------------------------
 -- Sequence structure for sponsor_sponsor_id_seq
 -- ----------------------------
+DROP SEQUENCE IF EXISTS "sponsor_sponsor_id_seq" CASCADE;
 CREATE SEQUENCE "sponsor_sponsor_id_seq" 
 INCREMENT 1
 MAXVALUE 2147483647
@@ -64,6 +71,7 @@ CACHE 1;
 -- ----------------------------
 -- Sequence structure for sponsored_projects_id_projet_seq
 -- ----------------------------
+DROP SEQUENCE IF EXISTS "sponsored_projects_id_projet_seq" CASCADE;
 CREATE SEQUENCE "sponsored_projects_id_projet_seq" 
 INCREMENT 1
 MAXVALUE 9223372036854775807
@@ -73,6 +81,7 @@ CACHE 1;
 -- ----------------------------
 -- Sequence structure for sponsored_projects_id_sponsor_seq
 -- ----------------------------
+DROP SEQUENCE IF EXISTS "sponsored_projects_id_sponsor_seq" CASCADE;
 CREATE SEQUENCE "sponsored_projects_id_sponsor_seq" 
 INCREMENT 1
 MAXVALUE 9223372036854775807
@@ -82,6 +91,7 @@ CACHE 1;
 -- ----------------------------
 -- Sequence structure for utilisateur_user_id_seq
 -- ----------------------------
+DROP SEQUENCE IF EXISTS "utilisateur_user_id_seq" CASCADE;
 CREATE SEQUENCE "utilisateur_user_id_seq" 
 INCREMENT 1
 MAXVALUE 2147483647
@@ -91,6 +101,7 @@ CACHE 1;
 -- ----------------------------
 -- Table structure for Fiction_Date
 -- ----------------------------
+DROP TABLE IF EXISTS "Fiction_Date" CASCADE;
 CREATE TABLE "Fiction_Date" (
   "fiction_Date" date NOT NULL
 )
@@ -99,6 +110,7 @@ CREATE TABLE "Fiction_Date" (
 -- ----------------------------
 -- Table structure for Milestones
 -- ----------------------------
+DROP TABLE IF EXISTS "Milestones" CASCADE;
 CREATE TABLE "Milestones" (
   "projet_id" int4 NOT NULL,
   "description" varchar(255) COLLATE "pg_catalog"."default",
@@ -110,6 +122,7 @@ CREATE TABLE "Milestones" (
 -- ----------------------------
 -- Table structure for participation
 -- ----------------------------
+DROP TABLE IF EXISTS "participation" CASCADE;
 CREATE TABLE "participation" (
   "user_id" int4 NOT NULL DEFAULT nextval('musicrowd.participation_user_id_seq'::regclass),
   "projet_id" int4 NOT NULL DEFAULT nextval('musicrowd.participation_projet_id_seq'::regclass),
@@ -121,6 +134,7 @@ CREATE TABLE "participation" (
 -- ----------------------------
 -- Table structure for participation_archivage
 -- ----------------------------
+DROP TABLE IF EXISTS "participation_archivage" CASCADE;
 CREATE TABLE "participation_archivage" (
   "projet_id" int4 NOT NULL,
   "user_id" int4 NOT NULL,
@@ -131,6 +145,7 @@ CREATE TABLE "participation_archivage" (
 -- ----------------------------
 -- Table structure for projet
 -- ----------------------------
+DROP TABLE IF EXISTS "projet" CASCADE;
 CREATE TABLE "projet" (
   "projet_id" int4 NOT NULL DEFAULT nextval('musicrowd.projet_projet_id_seq'::regclass),
   "user_id" int4 NOT NULL DEFAULT nextval('musicrowd.projet_user_id_seq'::regclass),
@@ -148,6 +163,7 @@ CREATE TABLE "projet" (
 -- ----------------------------
 -- Table structure for projet_archivage
 -- ----------------------------
+DROP TABLE IF EXISTS "projet_archivage" CASCADE;
 CREATE TABLE "projet_archivage" (
   "projet_id" int4 NOT NULL,
   "user_id" int4,
@@ -164,6 +180,7 @@ CREATE TABLE "projet_archivage" (
 -- ----------------------------
 -- Table structure for reward
 -- ----------------------------
+DROP TABLE IF EXISTS "reward" CASCADE;
 CREATE TABLE "reward" (
   "reward_id" int4 NOT NULL DEFAULT nextval('musicrowd.reward_reward_id_seq'::regclass),
   "projet_id" int4 NOT NULL DEFAULT nextval('musicrowd.reward_projet_id_seq'::regclass),
@@ -177,6 +194,7 @@ CREATE TABLE "reward" (
 -- ----------------------------
 -- Table structure for sponsor
 -- ----------------------------
+DROP TABLE IF EXISTS "sponsor" CASCADE;
 CREATE TABLE "sponsor" (
   "sponsor_id" int4 NOT NULL DEFAULT nextval('musicrowd.sponsor_sponsor_id_seq'::regclass),
   "nom" varchar(255) COLLATE "pg_catalog"."default",
@@ -187,6 +205,7 @@ CREATE TABLE "sponsor" (
 -- ----------------------------
 -- Table structure for sponsor_type
 -- ----------------------------
+DROP TABLE IF EXISTS "sponsor_type" CASCADE;
 CREATE TABLE "sponsor_type" (
   "sponsor_type_id" int4 NOT NULL,
   "sponsor_type_name" varchar(255) COLLATE "pg_catalog"."default"
@@ -196,6 +215,7 @@ CREATE TABLE "sponsor_type" (
 -- ----------------------------
 -- Table structure for sponsored_projects
 -- ----------------------------
+DROP TABLE IF EXISTS "sponsored_projects" CASCADE;
 CREATE TABLE "sponsored_projects" (
   "id_projet" int4 NOT NULL DEFAULT nextval('musicrowd.sponsored_projects_id_projet_seq'::regclass),
   "id_sponsor" int4 NOT NULL DEFAULT nextval('musicrowd.sponsored_projects_id_sponsor_seq'::regclass),
@@ -207,6 +227,7 @@ CREATE TABLE "sponsored_projects" (
 -- ----------------------------
 -- Table structure for utilisateur
 -- ----------------------------
+DROP TABLE IF EXISTS "utilisateur" CASCADE;
 CREATE TABLE "utilisateur" (
   "user_id" int4 NOT NULL DEFAULT nextval('musicrowd.utilisateur_user_id_seq'::regclass),
   "mdp" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
@@ -227,6 +248,7 @@ CREATE TABLE "utilisateur" (
 -- ----------------------------
 -- Table structure for utilisateur_archivage
 -- ----------------------------
+DROP TABLE IF EXISTS "utilisateur_archivage" CASCADE;
 CREATE TABLE "utilisateur_archivage" (
   "user_id" int4 NOT NULL,
   "nb_projet_supportes" int4,
