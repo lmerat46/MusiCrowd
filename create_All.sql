@@ -346,11 +346,6 @@ ALTER TABLE "utilisateur" ADD CONSTRAINT "utilisateur_pkey" PRIMARY KEY ("user_i
 ALTER TABLE "utilisateur_archivage" ADD CONSTRAINT "utilisateur_archivage_pkey" PRIMARY KEY ("user_id");
 
 -- ----------------------------
--- Foreign Keys structure for table Milestones
--- ----------------------------
-ALTER TABLE "Milestones" ADD CONSTRAINT "projet_id_fk" FOREIGN KEY ("projet_id") REFERENCES "projet" ("projet_id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- ----------------------------
 -- Foreign Keys structure for table participation
 -- ----------------------------
 ALTER TABLE "participation" ADD CONSTRAINT "participation_projet_id_fkey" FOREIGN KEY ("projet_id") REFERENCES "projet" ("projet_id") ON DELETE CASCADE ON UPDATE CASCADE;
