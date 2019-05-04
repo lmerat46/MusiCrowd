@@ -6,12 +6,7 @@ CREATE OR REPLACE FUNCTION "archivage"()
 	DECLARE partici RECORD;
 	DECLARE rew RECORD;
 BEGIN
-	RAISE NOTICE 'HERE';
-	RAISE NOTICE 'VALUE: %', OLD.date_fin;
-		RAISE NOTICE 'VALUE2: %', NEW.date_fin;
-				RAISE NOTICE 'VALUE3: %', NOW();
 	IF NEW.date_fin IN (SELECT "fiction_Date" FROM musicrowd."Fiction_Date") THEN
-	RAISE NOTICE 'yeah ifffffff';
 			INSERT INTO musicrowd.projet_archivage VALUES(OLD.projet_id, OLD.user_id,  OLD.nom_proj,OLD.description, OLD.date_deb, OLD.date_fin,OLD.somme_recoltee,OLD.objectif, OLD.taxe_perc);
 
 		FOR partici IN SELECT * FROM musicrowd.participation pa WHERE pa.projet_id = NEW.projet_id
@@ -22,14 +17,14 @@ BEGIN
 				UPDATE musicrowd.utilisateur SET balance = balance + partici.montant WHERE utilisateur.user_id = partici.user_id;
 				NEW.somme_recoltee = NEW.somme_recoltee - partici.montant; 
 			END IF;
-				DELETE FROM musicrowd.participation p WHERE p.projet_id = partici.projet_id AND p.user_id = partici.user_id;
+				--DELETE FROM musicrowd.participation p WHERE p.projet_id = partici.projet_id AND p.user_id = partici.user_id;
 		END LOOP;
-		
+		-- EST CE QU4ON SUPPRIME LES REWARD?
 		FOR rew IN SELECT * FROM musicrowd.reward r WHERE r.projet_id = OLD.projet_id
 		LOOP
 				DELETE FROM musicrowd.reward rd WHERE rd.projet_id = rew.projet_id;
 		END LOOP;
-		DELETE FROM musicrowd.projet prt WHERE prt.projet_id = OLD.projet_id;
+		--DELETE FROM musicrowd.projet prt WHERE prt.projet_id = OLD.projet_id;
 	RETURN NEW;
 	END IF;
 	RETURN NULL;
@@ -97,7 +92,6 @@ CREATE OR REPLACE FUNCTION "onCompletion"()
 			UPDATE musicrowd.utilisateur SET balance = balance + partici.montant WHERE user_id = partici.user_id;
 			--COMMIT;
 		END LOOP;
-		-- DELETE PROJET OR archivage quand meme?
 		RETURN NEW;
 			RETURN NEW; END IF;
 	END LOOP;

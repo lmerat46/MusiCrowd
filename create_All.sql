@@ -89,10 +89,30 @@ START 1
 CACHE 1;
 
 -- ----------------------------
+-- Sequence structure for sponsor_type_sponsor_type_id_seq
+-- ----------------------------
+DROP SEQUENCE IF EXISTS "sponsor_type_sponsor_type_id_seq" CASCADE;
+CREATE SEQUENCE "sponsor_type_sponsor_type_id_seq" 
+INCREMENT 1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;
+
+-- ----------------------------
 -- Sequence structure for utilisateur_user_id_seq
 -- ----------------------------
 DROP SEQUENCE IF EXISTS "utilisateur_user_id_seq" CASCADE;
 CREATE SEQUENCE "utilisateur_user_id_seq" 
+INCREMENT 1
+MAXVALUE 2147483647
+START 1
+CACHE 1;
+
+-- ----------------------------
+-- Sequence structure for milestones_milestone_id_seq
+-- ----------------------------
+DROP SEQUENCE IF EXISTS "milestones_milestone_id_seq" CASCADE;
+CREATE SEQUENCE "milestones_milestone_id_seq" 
 INCREMENT 1
 MAXVALUE 2147483647
 START 1
@@ -115,7 +135,7 @@ CREATE TABLE "Milestones" (
   "projet_id" int4 NOT NULL,
   "description" varchar(255) COLLATE "pg_catalog"."default",
   "objectif" int4,
-  "milsetone_id" int4 NOT NULL
+  "milsetone_id" int4 NOT NULL DEFAULT nextval('musicrowd.milestones_milestone_id_seq'::regclass)
 )
 ;
 
@@ -161,23 +181,6 @@ CREATE TABLE "projet" (
 ;
 
 -- ----------------------------
--- Table structure for projet_archivage
--- ----------------------------
-DROP TABLE IF EXISTS "projet_archivage" CASCADE;
-CREATE TABLE "projet_archivage" (
-  "projet_id" int4 NOT NULL,
-  "user_id" int4,
-  "nom_proj" varchar(255) COLLATE "pg_catalog"."default",
-  "description" varchar(255) COLLATE "pg_catalog"."default",
-  "date_deb" date,
-  "date_fin" date,
-  "objectif" varchar(255) COLLATE "pg_catalog"."default",
-  "somme_recoltee" int4 DEFAULT 0,
-  "taxe_perc" int4 DEFAULT 0
-)
-;
-
--- ----------------------------
 -- Table structure for reward
 -- ----------------------------
 DROP TABLE IF EXISTS "reward" CASCADE;
@@ -207,7 +210,7 @@ CREATE TABLE "sponsor" (
 -- ----------------------------
 DROP TABLE IF EXISTS "sponsor_type" CASCADE;
 CREATE TABLE "sponsor_type" (
-  "sponsor_type_id" int4 NOT NULL,
+  "sponsor_type_id" int4 NOT NULL DEFAULT nextval('musicrowd.sponsor_type_sponsor_type_id_seq'::regclass),
   "sponsor_type_name" varchar(255) COLLATE "pg_catalog"."default"
 )
 ;
@@ -306,11 +309,6 @@ ALTER TABLE "projet" ADD CONSTRAINT "projet_objectif_check" CHECK ((objectif >= 
 ALTER TABLE "projet" ADD CONSTRAINT "projet_pkey" PRIMARY KEY ("projet_id");
 
 -- ----------------------------
--- Primary Key structure for table projet_archivage
--- ----------------------------
-ALTER TABLE "projet_archivage" ADD CONSTRAINT "projet_archivage_pkey" PRIMARY KEY ("projet_id");
-
--- ----------------------------
 -- Indexes structure for table reward
 -- ----------------------------
 CREATE INDEX "projet_id_idx" ON "reward" USING btree (
@@ -376,7 +374,7 @@ ALTER TABLE "participation" ADD CONSTRAINT "participation_user_id_fkey" FOREIGN 
 -- ----------------------------
 -- Foreign Keys structure for table participation_archivage
 -- ----------------------------
-ALTER TABLE "participation_archivage" ADD CONSTRAINT "projet_archivage_id_fk" FOREIGN KEY ("projet_id") REFERENCES "projet_archivage" ("projet_id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "participation_archivage" ADD CONSTRAINT "projet_id_fk" FOREIGN KEY ("projet_id") REFERENCES "projet" ("projet_id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- ----------------------------
 -- Foreign Keys structure for table projet
