@@ -60,6 +60,22 @@ INSERT INTO "reward" ("projet_id", "nom_cadeau", "detail_cadeau", "somme_min", "
 INSERT INTO "reward" ("projet_id", "nom_cadeau", "detail_cadeau", "somme_min", "somme_max") VALUES (4, 'Album + Tee Shirt + Korg Analogue', 'Remporte le synthé de notre claviériste signé par nos soins !', 1000, 30000);
 COMMIT;
 
+
+-- ----------------------------
+-- Records of participation
+-- ----------------------------
+INSERT INTO MusiCrowd.Participation (user_id, projet_id, montant, date_p) VALUES (1,1, 50, '2018-12-31');
+INSERT INTO MusiCrowd.Participation (user_id, projet_id, montant, date_p) VALUES (1,2, 2000, '2019-03-26');
+INSERT INTO MusiCrowd.Participation (user_id, projet_id, montant, date_p) VALUES (2, 1, 3000, '2019-04-14');
+INSERT INTO MusiCrowd.Participation (user_id, projet_id, montant, date_p) VALUES (3, 4, 100, '2019-02-03');
+INSERT INTO MusiCrowd.Participation (user_id, projet_id, montant, date_p) VALUES (3, 3, 10, '2019-01-30');
+INSERT INTO MusiCrowd.Participation (user_id, projet_id, montant, date_p) VALUES (4, 1, 400, '2019-03-29');
+INSERT INTO MusiCrowd.Participation (user_id, projet_id, montant, date_p) VALUES (4, 3, 20, '2019-05-01');
+INSERT INTO MusiCrowd.Participation (user_id, projet_id, montant, date_p) VALUES (4, 4, 35, '2019-04-01');
+INSERT INTO MusiCrowd.Participation (user_id, projet_id, montant, date_p) VALUES (5, 2, 2000, '2019-04-04');
+INSERT INTO MusiCrowd.Participation (user_id, projet_id, montant, date_p) VALUES (5, 3, 10, '2019-05-09');
+INSERT INTO MusiCrowd.Participation (user_id, projet_id, montant, date_p) VALUES (3, 4, 1000, '2019-05-01');
+
 -- ----------------------------
 -- Records of sponsor_type
 -- ----------------------------
