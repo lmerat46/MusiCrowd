@@ -4,7 +4,7 @@
 CREATE OR REPLACE FUNCTION add_utilisateur(mdp text, nom text, prenom text, adresse text, telephone text, mail text, rib text, nb_projet_supportes numeric, nb_projet_crees numeric, balance numeric)
   RETURNS void AS $BODY$
 BEGIN
-INSERT INTO "utilisateur" ("mdp", "nom", "prenom", "adresse", "telephone", "mail", "rib", "nb_projet_supportes", "nb_projet_crees", "balance", "date_inscription", "date_connexion") VALUES (mdp, nom, prenom, adresse, telephone, mail, rib, nb_projet_supportes, nb_projet_crees, balance, NULL, NULL);
+INSERT INTO "utilisateur" ("mdp", "nom", "prenom", "adresse", "telephone", "mail", "rib", "nb_projet_supportes", "nb_projet_crees", "balance") VALUES (mdp, nom, prenom, adresse, telephone, mail, rib, nb_projet_supportes, nb_projet_crees, balance);
 END
 $BODY$
   LANGUAGE plpgsql;
@@ -88,6 +88,12 @@ $BODY$
 
 
 
+-- ----------------------------
+-- Records of Fiction_Date
+-- ----------------------------
+BEGIN;
+INSERT INTO "Fiction_Date" ("fiction_Date") VALUES ('2019-01-23');
+COMMIT;
 
 -- ----------------------------
 -- Records of utilisateur
@@ -97,13 +103,6 @@ SELECT add_utilisateur('mot3passe', 'Rogova', 'Alexandra', '124 rue de compans',
 SELECT add_utilisateur('mot5passe', 'Laplante', 'Sophie', '19 rue de Vaugirard', '0645567219', 'laplante@irif.fr', 'FR04576786273', 0, 1, 20);
 SELECT add_utilisateur('mot2passe', 'Merat', 'Laure', '184 rue de Tolbiac', '0666666666', 'laure.merat@etu.univ-paris-diderot.fr', 'FR45898676776796237H65', 0, 1, 2000);
 SELECT add_utilisateur('mot1passe', 'Amari', 'Nabil', '5 rue Thomas Mann', '0777777777', 'nabil.amari@etu.univ-paris-diderot.fr', 'FR04399902978798786N65', 2, 1, 700000);
-
--- ----------------------------
--- Records of Fiction_Date
--- ----------------------------
-BEGIN;
-INSERT INTO "Fiction_Date" ("fiction_Date") VALUES ('2019-05-26');
-COMMIT;
 
 -- ----------------------------
 -- Records of Milestones
@@ -121,12 +120,14 @@ SELECT add_projet(4, 'Outrun Alpha', 'Back to The 80s !', '2019-01-30', '2019-05
 SELECT add_projet(1, 'OnduLab X', 'Simulateur numérique d''effet de basse', '2018-12-31', '2019-05-26', '2600000', 1000000, 10);
 
 
+/*
 -- ----------------------------
 -- Records of participation_archivage
 -- ----------------------------
 BEGIN;
 INSERT INTO "participation_archivage" ("projet_id", "user_id", "date_p") VALUES (1, 2, '2019-05-03');
 COMMIT;
+*/
 
 -- ----------------------------
 -- Records of reward

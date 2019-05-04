@@ -7,7 +7,6 @@ CREATE OR REPLACE FUNCTION "archivage"()
 	DECLARE rew RECORD;
 BEGIN
 	IF NEW.date_fin IN (SELECT "fiction_Date" FROM musicrowd."Fiction_Date") THEN
-			INSERT INTO musicrowd.projet_archivage VALUES(OLD.projet_id, OLD.user_id,  OLD.nom_proj,OLD.description, OLD.date_deb, OLD.date_fin,OLD.somme_recoltee,OLD.objectif, OLD.taxe_perc);
 
 		FOR partici IN SELECT * FROM musicrowd.participation pa WHERE pa.projet_id = NEW.projet_id
 
@@ -55,8 +54,9 @@ CREATE OR REPLACE FUNCTION "On_SignUp"()
 	DECLARE tmp DATE;
 	BEGIN
 		SELECT "fiction_Date" INTO tmp FROM musicrowd."Fiction_Date";
-		NEW.date_inscription := tmp;
-		NEW.date_connexion := tmp;
+		RAISE NOTICE 'here %', tmp;
+		NEW.date_inscription = tmp;
+		NEW.date_connexion = tmp;
 		RETURN NEW;
 	END
 $BODY$
@@ -74,8 +74,10 @@ CREATE OR REPLACE FUNCTION "onCompletion"()
   -- Routine body goes here...
 	FOR rec IN SELECT * FROM musicrowd.projet
 	LOOP
+		RAISE NOTICE 'here';
 		IF ((rec.somme_recoltee >= rec.objectif)) AND rec.date_fin = NEW."fiction_Date"
-		THEN
+		THEN	
+			RAISE NOTICE 'also here';
 			UPDATE musicrowd.projet SET termine = TRUE WHERE projet_id = rec.projet_id;
 			RAISE NOTICE 'Somme percue apres application de la taxe musicrowd: %', rec.objectif - (rec.objectif*rec.taxe_perc/100);
 			RETURN NEW; 
@@ -102,7 +104,7 @@ CREATE OR REPLACE FUNCTION "OnProjectCreation"()
   RETURNS "pg_catalog"."trigger" AS $BODY$
 	BEGIN
   -- Routine body goes here...
-	UPDATE utilisateur SET nb_projet_crees = nb_projet_crees + 1 WHERE utilisateur.user_id = NEW.user_id;
+	UPDATE utilisateur SET nb_projet_crees = nb_projet_crees + 1, date_connexion = (SELECT "fiction_Date" FROM "Fiction_Date") WHERE utilisateur.user_id = NEW.user_id;
 	INSERT INTO reward (projet_id,nom_cadeau,detail_cadeau,somme_min,somme_max) VALUES (NEW.projet_id,'Remerciement','Merci pour avoir contribué à ce projet cher fan',1,New.objectif);
 	RETURN NEW;
 END
@@ -115,8 +117,9 @@ $BODY$
 -- ----------------------------
 CREATE OR REPLACE FUNCTION "OnUserParticipation"()
   RETURNS "pg_catalog"."trigger" AS $BODY$
+DECLARE rec RECORD;
 BEGIN
-  UPDATE musicrowd.utilisateur SET nb_projet_supportes = nb_projet_supportes + 1 WHERE utilisateur.user_id = NEW.user_id;
+  UPDATE musicrowd.utilisateur SET nb_projet_supportes = nb_projet_supportes + 1, date_connexion = (SELECT "fiction_Date" FROM "Fiction_Date") WHERE utilisateur.user_id = NEW.user_id;
 	UPDATE musicrowd.projet SET somme_recoltee = somme_recoltee + NEW.montant WHERE projet.projet_id = NEW.projet_id;
 	RETURN NEW;
 END
