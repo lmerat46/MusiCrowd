@@ -13,9 +13,6 @@ BEGIN
 
 		LOOP
 				INSERT INTO musicrowd.participation_archivage VALUES(partici.projet_id, partici.user_id,  partici.date_p);
-			IF NEW.termine IS FALSE THEN
-				UPDATE musicrowd.utilisateur SET balance = balance + partici.montant WHERE utilisateur.user_id = partici.user_id;
-				NEW.somme_recoltee = NEW.somme_recoltee - partici.montant; 
 			END IF;
 				--DELETE FROM musicrowd.participation p WHERE p.projet_id = partici.projet_id AND p.user_id = partici.user_id;
 		END LOOP;
@@ -87,10 +84,8 @@ CREATE OR REPLACE FUNCTION "onCompletion"()
 			UPDATE musicrowd.projet SET termine = FALSE WHERE projet_id = rec.projet_id;
 			FOR partici IN SELECT * FROM musicrowd.participation pa WHERE pa.projet_id = rec.projet_id
 		LOOP
-			--BEGIN TRANSACTION ISOLATION LEVEL REPEATABLE READ;
 			NEW.somme_recoltee = NEW.somme_recoltee - partici.montant;
 			UPDATE musicrowd.utilisateur SET balance = balance + partici.montant WHERE user_id = partici.user_id;
-			--COMMIT;
 		END LOOP;
 		RETURN NEW;
 			RETURN NEW; END IF;
@@ -140,7 +135,6 @@ CREATE OR REPLACE FUNCTION "RGPD"()
   -- Routine body goes here...
 	FOR util IN SELECT * FROM musicrowd.utilisateur
 	LOOP
-	RAISE NOTICE 'VALUE: %', date (util.date_connexion + "interval"('3 year') );
 	IF date (util.date_connexion + "interval"('3 year')) <= (SELECT "fiction_Date" FROM musicrowd."Fiction_Date")  THEN
 		RAISE NOTICE 'WAS HERE';
 		INSERT INTO musicrowd.utilisateur_archivage VALUES (util.user_id,util.nb_projet_supportes,util.nb_projet_crees);
