@@ -1,48 +1,8 @@
 -- ----------------------------
--- Sequence structure for participation_projet_id_seq
--- ----------------------------
-DROP SEQUENCE IF EXISTS "participation_projet_id_seq" CASCADE;
-CREATE SEQUENCE "participation_projet_id_seq" 
-INCREMENT 1
-MAXVALUE 2147483647
-START 1
-CACHE 1;
-
--- ----------------------------
--- Sequence structure for participation_user_id_seq
--- ----------------------------
-DROP SEQUENCE IF EXISTS "participation_user_id_seq" CASCADE;
-CREATE SEQUENCE "participation_user_id_seq" 
-INCREMENT 1
-MAXVALUE 2147483647
-START 1
-CACHE 1;
-
--- ----------------------------
 -- Sequence structure for projet_projet_id_seq
 -- ----------------------------
 DROP SEQUENCE IF EXISTS "projet_projet_id_seq" CASCADE;
 CREATE SEQUENCE "projet_projet_id_seq" 
-INCREMENT 1
-MAXVALUE 2147483647
-START 1
-CACHE 1;
-
--- ----------------------------
--- Sequence structure for projet_user_id_seq
--- ----------------------------
-DROP SEQUENCE IF EXISTS "projet_user_id_seq" CASCADE;
-CREATE SEQUENCE "projet_user_id_seq" 
-INCREMENT 1
-MAXVALUE 2147483647
-START 1
-CACHE 1;
-
--- ----------------------------
--- Sequence structure for reward_projet_id_seq
--- ----------------------------
-DROP SEQUENCE IF EXISTS "reward_projet_id_seq" CASCADE;
-CREATE SEQUENCE "reward_projet_id_seq" 
 INCREMENT 1
 MAXVALUE 2147483647
 START 1
@@ -65,26 +25,6 @@ DROP SEQUENCE IF EXISTS "sponsor_sponsor_id_seq" CASCADE;
 CREATE SEQUENCE "sponsor_sponsor_id_seq" 
 INCREMENT 1
 MAXVALUE 2147483647
-START 1
-CACHE 1;
-
--- ----------------------------
--- Sequence structure for sponsored_projects_id_projet_seq
--- ----------------------------
-DROP SEQUENCE IF EXISTS "sponsored_projects_id_projet_seq" CASCADE;
-CREATE SEQUENCE "sponsored_projects_id_projet_seq" 
-INCREMENT 1
-MAXVALUE 9223372036854775807
-START 1
-CACHE 1;
-
--- ----------------------------
--- Sequence structure for sponsored_projects_id_sponsor_seq
--- ----------------------------
-DROP SEQUENCE IF EXISTS "sponsored_projects_id_sponsor_seq" CASCADE;
-CREATE SEQUENCE "sponsored_projects_id_sponsor_seq" 
-INCREMENT 1
-MAXVALUE 9223372036854775807
 START 1
 CACHE 1;
 
@@ -144,8 +84,8 @@ CREATE TABLE "milestones" (
 -- ----------------------------
 DROP TABLE IF EXISTS "participation" CASCADE;
 CREATE TABLE "participation" (
-  "user_id" int4 NOT NULL DEFAULT nextval('musicrowd.participation_user_id_seq'::regclass),
-  "projet_id" int4 NOT NULL DEFAULT nextval('musicrowd.participation_projet_id_seq'::regclass),
+  "user_id" int4 NOT NULL,
+  "projet_id" int4 NOT NULL,
   "montant" int4,
   "date_p" date NOT NULL
 )
@@ -168,7 +108,7 @@ CREATE TABLE "participation_archivage" (
 DROP TABLE IF EXISTS "projet" CASCADE;
 CREATE TABLE "projet" (
   "projet_id" int4 NOT NULL DEFAULT nextval('musicrowd.projet_projet_id_seq'::regclass),
-  "user_id" int4 NOT NULL DEFAULT nextval('musicrowd.projet_user_id_seq'::regclass),
+  "user_id" int4 NOT NULL,
   "nom_proj" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
   "description" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
   "date_deb" date NOT NULL,
@@ -186,7 +126,7 @@ CREATE TABLE "projet" (
 DROP TABLE IF EXISTS "reward" CASCADE;
 CREATE TABLE "reward" (
   "reward_id" int4 NOT NULL DEFAULT nextval('musicrowd.reward_reward_id_seq'::regclass),
-  "projet_id" int4 NOT NULL DEFAULT nextval('musicrowd.reward_projet_id_seq'::regclass),
+  "projet_id" int4 NOT NULL,
   "nom_cadeau" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
   "detail_cadeau" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
   "somme_min" int4,
@@ -220,8 +160,8 @@ CREATE TABLE "sponsor_type" (
 -- ----------------------------
 DROP TABLE IF EXISTS "sponsored_projects" CASCADE;
 CREATE TABLE "sponsored_projects" (
-  "id_projet" int4 NOT NULL DEFAULT nextval('musicrowd.sponsored_projects_id_projet_seq'::regclass),
-  "id_sponsor" int4 NOT NULL DEFAULT nextval('musicrowd.sponsored_projects_id_sponsor_seq'::regclass),
+  "id_projet" int4 NOT NULL,
+  "id_sponsor" int4 NOT NULL,
   "sponsoring_action" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
   "tax" int4
 )
