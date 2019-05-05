@@ -27,6 +27,8 @@ select pg_sleep(10);
 select *from participation_archivage WHERE projet_id = 1;
 select pg_sleep(10);
 
+select get_sponsor_tax_on_project(1);
+
 
 ROLLBACK TO SAVEPOINT test1;
 COMMIT;

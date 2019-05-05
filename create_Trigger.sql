@@ -14,12 +14,12 @@ BEGIN
 				INSERT INTO musicrowd.participation_archivage VALUES(partici.projet_id, partici.user_id,  partici.date_p);
 				DELETE FROM musicrowd.participation p WHERE p.projet_id = partici.projet_id AND p.user_id = partici.user_id;
 		END LOOP;
-		-- EST CE QU4ON SUPPRIME LES REWARD?
+
 		FOR rew IN SELECT * FROM musicrowd.reward r WHERE r.projet_id = OLD.projet_id
 		LOOP
 				DELETE FROM musicrowd.reward rd WHERE rd.projet_id = rew.projet_id;
 		END LOOP;
-		--DELETE FROM musicrowd.projet prt WHERE prt.projet_id = OLD.projet_id;
+
 	RETURN NEW;
 	END IF;
 	RETURN NULL;
@@ -37,7 +37,6 @@ CREATE OR REPLACE FUNCTION "On_SignUp"()
 	DECLARE tmp DATE;
 	BEGIN
 		SELECT fictive_date INTO tmp FROM musicrowd.fiction_date;
-		RAISE NOTICE 'here %', tmp;
 		NEW.date_inscription = tmp;
 		NEW.date_connexion = tmp;
 		RETURN NEW;
@@ -57,10 +56,8 @@ CREATE OR REPLACE FUNCTION "onCompletion"()
   -- Routine body goes here...
 	FOR rec IN SELECT * FROM musicrowd.projet
 	LOOP
-		RAISE NOTICE 'here';
 		IF ((rec.somme_recoltee >= rec.objectif)) AND rec.date_fin = NEW.fictive_date
 		THEN	
-			RAISE NOTICE 'also here';
 			UPDATE musicrowd.projet SET termine = TRUE WHERE projet_id = rec.projet_id;
 			RAISE NOTICE 'Somme percue apres application de la taxe musicrowd: %', rec.objectif - (rec.objectif*rec.taxe_perc/100);
 			RETURN NEW; 
@@ -121,7 +118,6 @@ CREATE OR REPLACE FUNCTION "RGPD"()
 	FOR util IN SELECT * FROM musicrowd.utilisateur
 	LOOP
 	IF date (util.date_connexion + "interval"('3 year')) <= (SELECT fictive_date FROM musicrowd.fiction_date)  THEN
-		RAISE NOTICE 'WAS HERE';
 		INSERT INTO musicrowd.utilisateur_archivage VALUES (util.user_id,util.nb_projet_supportes,util.nb_projet_crees);
 		DELETE FROM musicrowd.utilisateur WHERE user_id = util.user_id;
 	END IF;
@@ -146,7 +142,7 @@ CREATE OR REPLACE FUNCTION "RibCheck"()
 	
 IF ribb IS NULL
 THEN
-RAISE EXCEPTION 'NO RIB BRO OR you are broke';
+RAISE EXCEPTION 'NO RIB';
 RETURN NULL; 
 ELSIF balanceb >= NEW.montant THEN
 	SELECT * INTO rec FROM musicrowd.participation WHERE user_id = NEW.user_id AND projet_id = NEW.projet_id;
@@ -160,7 +156,7 @@ UPDATE musicrowd.Participation SET montant = montant + NEW.montant, date_p = NEW
 RETURN NULL;
 END IF;
 ELSE 
-	RAISE EXCEPTION 'NOT ENOUGH MONEY';
+	RAISE EXCEPTION 'NOT ENOUGH MONEY: %. REQUIRED: %', balanceb, NEW.montant;
 	RETURN NULL;
 END IF;
 END
