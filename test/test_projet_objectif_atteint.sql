@@ -36,7 +36,7 @@ select *from participation WHERE projet_id = 4;
 select pg_sleep(10);
 select *from projet WHERE projet_id = 4;
 select pg_sleep(10);
-\echo 'participation archivée dans table participation';
+\echo 'participation archivée dans table participation_archivage';
 select *from participation_archivage WHERE projet_id = 4;
 select pg_sleep(10);
 

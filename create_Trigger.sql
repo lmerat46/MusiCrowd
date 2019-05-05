@@ -62,12 +62,13 @@ CREATE OR REPLACE FUNCTION "onCompletion"()
 			RAISE NOTICE 'Somme percue apres application de la taxe musicrowd: %', rec.objectif - (rec.objectif*rec.taxe_perc/100);
 			RETURN NEW; 
 		ELSIF (	rec.date_fin = NEW.fictive_date) THEN
-			UPDATE musicrowd.projet SET termine = FALSE WHERE projet_id = rec.projet_id;
 			FOR partici IN SELECT * FROM musicrowd.participation pa WHERE pa.projet_id = rec.projet_id
 		LOOP
-			NEW.somme_recoltee = NEW.somme_recoltee - partici.montant;
+			RAISE NOTICE 'was here';
+			UPDATE projet SET somme_recoltee = somme_recoltee - partici.montant WHERE projet_id = rec.projet_id;
 			UPDATE musicrowd.utilisateur SET balance = balance + partici.montant WHERE user_id = partici.user_id;
 		END LOOP;
+		UPDATE musicrowd.projet SET termine = FALSE WHERE projet_id = rec.projet_id;
 		RETURN NEW;
 			RETURN NEW; END IF;
 	END LOOP;
