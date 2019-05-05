@@ -10,12 +10,12 @@ $BODY$
   LANGUAGE plpgsql;
 
 -- ----------------------------
--- Function add Milestones
+-- Function add milestones
 -- ----------------------------
 CREATE OR REPLACE FUNCTION add_milestone(projet_id numeric, description text, objectif numeric)
   RETURNS void AS $BODY$
 BEGIN
-INSERT INTO "Milestones" ("projet_id", "description", "objectif") VALUES (projet_id, description, objectif);
+INSERT INTO "milestones" ("projet_id", "description", "objectif") VALUES (projet_id, description, objectif);
 END
 $BODY$
   LANGUAGE plpgsql;
@@ -92,7 +92,7 @@ $BODY$
 -- Records of Fiction_Date
 -- ----------------------------
 BEGIN;
-INSERT INTO "Fiction_Date" ("fiction_Date") VALUES ('2019-01-23');
+INSERT INTO fiction_date (fictive_date) VALUES ('2019-01-23');
 COMMIT;
 
 -- ----------------------------

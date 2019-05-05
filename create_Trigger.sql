@@ -6,7 +6,7 @@ CREATE OR REPLACE FUNCTION "archivage"()
 	DECLARE partici RECORD;
 	DECLARE rew RECORD;
 BEGIN
-	IF NEW.date_fin IN (SELECT "fiction_Date" FROM musicrowd."Fiction_Date") THEN
+	IF NEW.date_fin IN (SELECT fictive_date FROM musicrowd.fiction_date) THEN
 
 		FOR partici IN SELECT * FROM musicrowd.participation pa WHERE pa.projet_id = NEW.projet_id
 
@@ -28,23 +28,6 @@ $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
 
--- ----------------------------
--- Function structure for getalluser_rewards
--- ----------------------------
-CREATE OR REPLACE FUNCTION "getalluser_rewards"("user_idd" int4, "projet_idd" int4)
-  RETURNS TABLE("nom" varchar, "detail" varchar) AS $BODY$
-BEGIN
-RETURN QUERY
-SELECT reward.nom_cadeau, reward.detail_cadeau FROM reward WHERE reward.projet_id = projet_idd AND reward.somme_min <= (SELECT participation.montant FROM participation WHERE participation.projet_id = projet_idd AND participation.user_id = user_idd);
-END
-$BODY$
-  LANGUAGE plpgsql VOLATILE
-  COST 100
-  ROWS 1000;
-
-
-
-
 
 -- ----------------------------
 -- Function structure for On_SignUp
@@ -53,7 +36,7 @@ CREATE OR REPLACE FUNCTION "On_SignUp"()
   RETURNS "pg_catalog"."trigger" AS $BODY$
 	DECLARE tmp DATE;
 	BEGIN
-		SELECT "fiction_Date" INTO tmp FROM musicrowd."Fiction_Date";
+		SELECT fictive_date INTO tmp FROM musicrowd.fiction_date;
 		RAISE NOTICE 'here %', tmp;
 		NEW.date_inscription = tmp;
 		NEW.date_connexion = tmp;
@@ -75,13 +58,13 @@ CREATE OR REPLACE FUNCTION "onCompletion"()
 	FOR rec IN SELECT * FROM musicrowd.projet
 	LOOP
 		RAISE NOTICE 'here';
-		IF ((rec.somme_recoltee >= rec.objectif)) AND rec.date_fin = NEW."fiction_Date"
+		IF ((rec.somme_recoltee >= rec.objectif)) AND rec.date_fin = NEW.fictive_date
 		THEN	
 			RAISE NOTICE 'also here';
 			UPDATE musicrowd.projet SET termine = TRUE WHERE projet_id = rec.projet_id;
 			RAISE NOTICE 'Somme percue apres application de la taxe musicrowd: %', rec.objectif - (rec.objectif*rec.taxe_perc/100);
 			RETURN NEW; 
-		ELSIF (	rec.date_fin = NEW."fiction_Date") THEN
+		ELSIF (	rec.date_fin = NEW.fictive_date) THEN
 			UPDATE musicrowd.projet SET termine = FALSE WHERE projet_id = rec.projet_id;
 			FOR partici IN SELECT * FROM musicrowd.participation pa WHERE pa.projet_id = rec.projet_id
 		LOOP
@@ -104,7 +87,7 @@ CREATE OR REPLACE FUNCTION "OnProjectCreation"()
   RETURNS "pg_catalog"."trigger" AS $BODY$
 	BEGIN
   -- Routine body goes here...
-	UPDATE utilisateur SET nb_projet_crees = nb_projet_crees + 1, date_connexion = (SELECT "fiction_Date" FROM "Fiction_Date") WHERE utilisateur.user_id = NEW.user_id;
+	UPDATE utilisateur SET nb_projet_crees = nb_projet_crees + 1, date_connexion = (SELECT fictive_date FROM fiction_date) WHERE utilisateur.user_id = NEW.user_id;
 	INSERT INTO reward (projet_id,nom_cadeau,detail_cadeau,somme_min,somme_max) VALUES (NEW.projet_id,'Remerciement','Merci pour avoir contribué à ce projet cher fan',1,New.objectif);
 	RETURN NEW;
 END
@@ -119,7 +102,7 @@ CREATE OR REPLACE FUNCTION "OnUserParticipation"()
   RETURNS "pg_catalog"."trigger" AS $BODY$
 DECLARE rec RECORD;
 BEGIN
-  UPDATE musicrowd.utilisateur SET nb_projet_supportes = nb_projet_supportes + 1, date_connexion = (SELECT "fiction_Date" FROM "Fiction_Date") WHERE utilisateur.user_id = NEW.user_id;
+  UPDATE musicrowd.utilisateur SET nb_projet_supportes = nb_projet_supportes + 1, date_connexion = (SELECT fictive_date FROM fiction_date) WHERE utilisateur.user_id = NEW.user_id;
 	UPDATE musicrowd.projet SET somme_recoltee = somme_recoltee + NEW.montant WHERE projet.projet_id = NEW.projet_id;
 	RETURN NEW;
 END
@@ -137,7 +120,7 @@ CREATE OR REPLACE FUNCTION "RGPD"()
   -- Routine body goes here...
 	FOR util IN SELECT * FROM musicrowd.utilisateur
 	LOOP
-	IF date (util.date_connexion + "interval"('3 year')) <= (SELECT "fiction_Date" FROM musicrowd."Fiction_Date")  THEN
+	IF date (util.date_connexion + "interval"('3 year')) <= (SELECT fictive_date FROM musicrowd.fiction_date)  THEN
 		RAISE NOTICE 'WAS HERE';
 		INSERT INTO musicrowd.utilisateur_archivage VALUES (util.user_id,util.nb_projet_supportes,util.nb_projet_crees);
 		DELETE FROM musicrowd.utilisateur WHERE user_id = util.user_id;
@@ -172,6 +155,7 @@ THEN
 UPDATE musicrowd.utilisateur SET balance = balance - NEW.montant WHERE utilisateur.user_id = NEW.user_id;
 	RETURN NEW;
 ELSE
+UPDATE musicrowd.utilisateur SET balance = balance - NEW.montant WHERE utilisateur.user_id = NEW.user_id;
 UPDATE musicrowd.Participation SET montant = montant + NEW.montant, date_p = NEW.date_p WHERE user_id = NEW.user_id AND projet_id = NEW.projet_id;
 RETURN NULL;
 END IF;
@@ -185,12 +169,12 @@ $BODY$
   COST 100;
 
 -- ----------------------------
--- Triggers structure for table Fiction_Date
+-- Triggers structure for table fiction_date
 -- ----------------------------
-CREATE TRIGGER "OnComplete_trigg" AFTER UPDATE OF "fiction_Date" ON "Fiction_Date"
+CREATE TRIGGER "OnComplete_trigg" AFTER UPDATE OF fictive_date ON fiction_date
 FOR EACH ROW
 EXECUTE PROCEDURE "musicrowd"."onCompletion"();
-CREATE TRIGGER "RGPD_trigg" AFTER UPDATE OF "fiction_Date" ON "Fiction_Date"
+CREATE TRIGGER "RGPD_trigg" AFTER UPDATE OF fictive_date ON fiction_date
 FOR EACH ROW
 EXECUTE PROCEDURE "musicrowd"."RGPD"();
 

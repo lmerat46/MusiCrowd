@@ -3,7 +3,7 @@ CREATE OR REPLACE FUNCTION "incrementation_date_fictive"(y numeric, m numeric, d
   RETURNS "pg_catalog"."void" AS $BODY$
 	BEGIN
   -- Routine body goes here...
-	UPDATE "musicrowd"."Fiction_Date" SET "fiction_Date" = DATE("fiction_Date" +  y * INTERVAL ' 1 YEAR' + m * INTERVAL '1 MONTH' + d * INTERVAL '1 DAY'); 
+	UPDATE "musicrowd".fiction_date SET fictive_date = DATE(fictive_date +  y * INTERVAL ' 1 YEAR' + m * INTERVAL '1 MONTH' + d * INTERVAL '1 DAY'); 
 END
 $BODY$
   LANGUAGE plpgsql VOLATILE

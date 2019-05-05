@@ -121,17 +121,17 @@ CACHE 1;
 -- ----------------------------
 -- Table structure for Fiction_Date
 -- ----------------------------
-DROP TABLE IF EXISTS "Fiction_Date" CASCADE;
-CREATE TABLE "Fiction_Date" (
-  "fiction_Date" date NOT NULL
+DROP TABLE IF EXISTS "fiction_date" CASCADE;
+CREATE TABLE "fiction_date" (
+  "fictive_date" date NOT NULL
 )
 ;
 
 -- ----------------------------
 -- Table structure for Milestones
 -- ----------------------------
-DROP TABLE IF EXISTS "Milestones" CASCADE;
-CREATE TABLE "Milestones" (
+DROP TABLE IF EXISTS "milestones" CASCADE;
+CREATE TABLE "milestones" (
   "projet_id" int4 NOT NULL,
   "description" varchar(255) COLLATE "pg_catalog"."default",
   "objectif" int4,
@@ -262,12 +262,12 @@ CREATE TABLE "utilisateur_archivage" (
 -- ----------------------------
 -- Primary Key structure for table Fiction_Date
 -- ----------------------------
-ALTER TABLE "Fiction_Date" ADD CONSTRAINT "Fiction_Date_pkey" PRIMARY KEY ("fiction_Date");
+ALTER TABLE "fiction_date" ADD CONSTRAINT "fiction_date_pkey" PRIMARY KEY ("fictive_date");
 
 -- ----------------------------
 -- Primary Key structure for table Milestones
 -- ----------------------------
-ALTER TABLE "Milestones" ADD CONSTRAINT "Milestones_pkey" PRIMARY KEY ("projet_id", "milsetone_id");
+ALTER TABLE "milestones" ADD CONSTRAINT "milestones_pkey" PRIMARY KEY ("projet_id", "milsetone_id");
 
 -- ----------------------------
 -- Checks structure for table participation
@@ -395,3 +395,4 @@ ALTER TABLE "sponsor" ADD CONSTRAINT "sponsor_sponsor_type_id_fk" FOREIGN KEY ("
 -- Foreign Keys structure for table sponsored_projects
 -- ----------------------------
 ALTER TABLE "sponsored_projects" ADD CONSTRAINT "id_sponsor_fk" FOREIGN KEY ("id_sponsor") REFERENCES "sponsor" ("sponsor_id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "sponsored_projects" ADD CONSTRAINT "id_projet_sponsored_fk" FOREIGN KEY ("id_projet") REFERENCES "projet" ("projet_id") ON DELETE CASCADE ON UPDATE CASCADE;
