@@ -92,7 +92,7 @@ $BODY$
 -- Records of Fiction_Date
 -- ----------------------------
 BEGIN;
-INSERT INTO fiction_date (fictive_date) VALUES ('2019-01-23');
+INSERT INTO fiction_date (fictive_date) VALUES ('2019-01-26');
 COMMIT;
 
 -- ----------------------------
@@ -117,17 +117,7 @@ SELECT add_milestone(4, 'Deux Morceau de plus dans l''Album', 60000);
 SELECT add_projet(2, 'Tranxen 400', 'VST Compatible avec Pro Tools, permet de moduler les pic, les poc mais aussi les pitch et les potch', '2019-02-15', '2019-05-23', 10000, 0, 50);
 SELECT add_projet(3, 'ChipWave', 'Logiciel de MAO taillé pour la création de musique 8 bits.', '2019-01-01', '2019-05-10', 200000, 0, 5);
 SELECT add_projet(4, 'Outrun Alpha', 'Back to The 80s !', '2019-01-30', '2019-05-01', 50000, 0, 15);
-SELECT add_projet(1, 'OnduLab X', 'Simulateur numérique d''effet de basse', '2018-12-31', '2019-05-26', '2600000', 1000000, 10);
-
-
-/*
--- ----------------------------
--- Records of participation_archivage
--- ----------------------------
-BEGIN;
-INSERT INTO "participation_archivage" ("projet_id", "user_id", "date_p") VALUES (1, 2, '2019-05-03');
-COMMIT;
-*/
+SELECT add_projet(1, 'OnduLab X', 'Simulateur numérique d''effet de basse', '2018-12-31', '2019-05-26', 260000, 0, 10);
 
 -- ----------------------------
 -- Records of reward

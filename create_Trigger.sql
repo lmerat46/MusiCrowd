@@ -153,6 +153,7 @@ UPDATE musicrowd.utilisateur SET balance = balance - NEW.montant WHERE utilisate
 ELSE
 UPDATE musicrowd.utilisateur SET balance = balance - NEW.montant WHERE utilisateur.user_id = NEW.user_id;
 UPDATE musicrowd.Participation SET montant = montant + NEW.montant, date_p = NEW.date_p WHERE user_id = NEW.user_id AND projet_id = NEW.projet_id;
+UPDATE musicrowd.projet SET somme_recoltee = somme_recoltee + NEW.montant WHERE projet_id = NEW.projet_id;
 RETURN NULL;
 END IF;
 ELSE 
