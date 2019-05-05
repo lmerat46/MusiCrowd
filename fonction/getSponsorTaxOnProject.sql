@@ -1,6 +1,3 @@
--- ----------------------------
--- Function structure for getSponsorTaxOnProject
--- ----------------------------
 CREATE OR REPLACE FUNCTION "getSponsorTaxOnProject"("projet_idd" int4)
   RETURNS TABLE("project_name" varchar, "sponsor_name" varchar, "sponsor_type" varchar, "sponsor_pay" int4) AS $BODY$
 BEGIN

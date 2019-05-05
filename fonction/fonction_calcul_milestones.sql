@@ -1,6 +1,3 @@
--- ----------------------------
--- Function structure for getProjectMilestones
--- ----------------------------
 CREATE OR REPLACE FUNCTION "getProjectMilestones"("projet_idd" int4)
   RETURNS TABLE("projet_id" int4, "nom_projet" varchar, "milestones_description" varchar) AS $BODY$
 BEGIN

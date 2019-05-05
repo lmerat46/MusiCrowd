@@ -1,4 +1,3 @@
-DROP FUNCTION IF EXISTS "incrementation_date_fictive"(y numeric, m numeric, d numeric) CASCADE;
 CREATE OR REPLACE FUNCTION "incrementation_date_fictive"(y numeric, m numeric, d numeric)
   RETURNS "pg_catalog"."void" AS $BODY$
 	BEGIN
