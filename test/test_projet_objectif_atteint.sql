@@ -4,7 +4,7 @@ SAVEPOINT test1;
 \echo 'incrementation de 1 mois';
 select incrementation_date_fictive(0,1,0);
 select *from utilisateur WHERE user_id = 5;
-select pg_sleep(10);
+select pg_sleep(5);
 
 \echo 'utilisateur 5 participe à projet 4 avec 400 000 euros';
 select add_participation(5,4,400000,(SELECT fictive_date FROM fiction_date));
@@ -12,7 +12,7 @@ select add_participation(5,4,400000,(SELECT fictive_date FROM fiction_date));
 select *from participation WHERE user_id = 5;
 
 \echo 'augmentation dans projet de somme_recoltée. diminution balance utilisateur 5 + incrementation de nb_projet_supportes';
-select pg_sleep(10);
+select pg_sleep(5);
 select *from projet WHERE projet_id = 4;
 select *from utilisateur WHERE user_id = 5;
 
@@ -21,9 +21,9 @@ select *from utilisateur WHERE user_id = 5;
 \echo 'pas de participation ajoutée mais celle déjà présente modifiée';
 select add_participation(5,4,20,(SELECT fictive_date FROM fiction_date));
 select *from participation WHERE user_id = 5;
+select pg_sleep(5);
 
 \echo 'pas d augmentation de nb_projet_supportes';
-select pg_sleep(10);
 select *from projet WHERE projet_id = 4;
 select *from utilisateur WHERE user_id = 5;
 select pg_sleep(10);
@@ -33,7 +33,7 @@ select incrementation_date_fictive(0,3,0);
 \echo 'participation supprimées de la table participation';
 select *from participation WHERE projet_id = 4;
 \echo 'attribut termine du projet passé à t';
-select pg_sleep(10);
+select pg_sleep(5);
 select *from projet WHERE projet_id = 4;
 select pg_sleep(10);
 \echo 'participation archivée dans table participation_archivage';
@@ -42,6 +42,12 @@ select pg_sleep(10);
 
 \echo 'affichage des sponsors avec actions proposées';
 select get_sponsor_tax_on_project(4);
+
+\echo 'affichage des milestones atteints du projet 4';
+select get_project_milestones(4);
+
+\echo 'affichage des rewards gagnés par l utilisateur 5 sur le projet 4';
+select getalluser_rewards(5,4);
 
 
 ROLLBACK TO SAVEPOINT test1;

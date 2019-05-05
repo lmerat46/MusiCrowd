@@ -98,6 +98,7 @@ DROP TABLE IF EXISTS "participation_archivage" CASCADE;
 CREATE TABLE "participation_archivage" (
   "projet_id" int4 NOT NULL,
   "user_id" int4 NOT NULL,
+  "montant" int4,
   "date_p" date
 )
 ;
@@ -311,15 +312,16 @@ ALTER TABLE "utilisateur_archivage" ADD CONSTRAINT "utilisateur_archivage_pkey" 
 ALTER TABLE "participation" ADD CONSTRAINT "participation_projet_id_fkey" FOREIGN KEY ("projet_id") REFERENCES "projet" ("projet_id") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "participation" ADD CONSTRAINT "participation_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "utilisateur" ("user_id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- ----------------------------
--- Foreign Keys structure for table participation_archivage
--- ----------------------------
-ALTER TABLE "participation_archivage" ADD CONSTRAINT "projet_id_fk" FOREIGN KEY ("projet_id") REFERENCES "projet" ("projet_id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- ----------------------------
 -- Foreign Keys structure for table projet
 -- ----------------------------
 ALTER TABLE "projet" ADD CONSTRAINT "projet_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "utilisateur" ("user_id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- ----------------------------
+-- Foreign Keys structure for table milestones
+-- ----------------------------
+ALTER TABLE "milestones" ADD CONSTRAINT "milestones_projet_id_fkey" FOREIGN KEY ("projet_id") REFERENCES "projet" ("projet_id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- ----------------------------
 -- Foreign Keys structure for table reward

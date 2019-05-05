@@ -6,18 +6,13 @@ CREATE OR REPLACE FUNCTION "archivage"()
 	DECLARE partici RECORD;
 	DECLARE rew RECORD;
 BEGIN
-	IF NEW.date_fin IN (SELECT fictive_date FROM musicrowd.fiction_date) THEN
+	IF date(NEW.date_fin) <=  (SELECT fictive_date FROM musicrowd.fiction_date) THEN
 
 		FOR partici IN SELECT * FROM musicrowd.participation pa WHERE pa.projet_id = NEW.projet_id
 
 		LOOP
-				INSERT INTO musicrowd.participation_archivage VALUES(partici.projet_id, partici.user_id,  partici.date_p);
+				INSERT INTO musicrowd.participation_archivage VALUES(partici.projet_id, partici.user_id,  partici.montant, partici.date_p);
 				DELETE FROM musicrowd.participation p WHERE p.projet_id = partici.projet_id AND p.user_id = partici.user_id;
-		END LOOP;
-
-		FOR rew IN SELECT * FROM musicrowd.reward r WHERE r.projet_id = OLD.projet_id
-		LOOP
-				DELETE FROM musicrowd.reward rd WHERE rd.projet_id = rew.projet_id;
 		END LOOP;
 
 	RETURN NEW;
@@ -59,7 +54,7 @@ CREATE OR REPLACE FUNCTION "onCompletion"()
 		IF ((rec.somme_recoltee >= rec.objectif)) AND rec.date_fin = NEW.fictive_date
 		THEN	
 			UPDATE musicrowd.projet SET termine = TRUE WHERE projet_id = rec.projet_id;
-			RAISE NOTICE 'Somme percue apres application de la taxe musicrowd: %', rec.objectif - (rec.objectif*rec.taxe_perc/100);
+			RAISE NOTICE 'Somme percue apres application de la taxe musicrowd: %', rec.somme_recoltee - (rec.somme_recoltee*rec.taxe_perc/100);
 			RETURN NEW; 
 		ELSIF (	rec.date_fin = NEW.fictive_date) THEN
 			FOR partici IN SELECT * FROM musicrowd.participation pa WHERE pa.projet_id = rec.projet_id

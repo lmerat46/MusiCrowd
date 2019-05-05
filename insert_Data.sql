@@ -45,10 +45,10 @@ $BODY$
 -- ----------------------------
 -- Records of projet
 -- ----------------------------
-CREATE OR REPLACE FUNCTION add_projet(user_id numeric, nom_proj text, description text, date_deb date, date_fin date, objectif numeric, somme_recoltee numeric, taxe_perc numeric)
+CREATE OR REPLACE FUNCTION add_projet(user_id numeric, nom_proj text, description text, date_deb date, date_fin date, objectif numeric, somme_recoltee numeric)
   RETURNS void AS $BODY$
 BEGIN
-INSERT INTO "projet" ("user_id", "nom_proj", "description", "date_deb", "date_fin", "objectif", "somme_recoltee", "taxe_perc", "termine") VALUES (user_id, nom_proj, description, date_deb, date_fin, objectif, somme_recoltee, taxe_perc, 'f');
+INSERT INTO "projet" ("user_id", "nom_proj", "description", "date_deb", "date_fin", "objectif", "somme_recoltee", "taxe_perc", "termine") VALUES (user_id, nom_proj, description, date_deb, date_fin, objectif, somme_recoltee, 10, 'f');
 END
 $BODY$
   LANGUAGE plpgsql;
@@ -105,19 +105,20 @@ SELECT add_utilisateur('mot2passe', 'Merat', 'Laure', '184 rue de Tolbiac', '066
 SELECT add_utilisateur('mot1passe', 'Amari', 'Nabil', '5 rue Thomas Mann', '0777777777', 'nabil.amari@etu.univ-paris-diderot.fr', 'FR04399902978798786N65', 2, 1, 700000);
 
 -- ----------------------------
+-- Records of projet
+-- ----------------------------
+SELECT add_projet(2, 'Tranxen 400', 'VST Compatible avec Pro Tools, permet de moduler les pic, les poc mais aussi les pitch et les potch', '2019-02-15', '2019-05-23', 10000, 0);
+SELECT add_projet(3, 'ChipWave', 'Logiciel de MAO taillé pour la création de musique 8 bits.', '2019-01-01', '2019-05-10', 200000, 0);
+SELECT add_projet(4, 'Outrun Alpha', 'Back to The 80s !', '2019-01-30', '2019-05-01', 50000, 0);
+SELECT add_projet(1, 'OnduLab X', 'Simulateur numérique d''effet de basse', '2018-12-31', '2019-05-26', 260000, 0);
+
+-- ----------------------------
 -- Records of Milestones
 -- ----------------------------
 SELECT add_milestone(2, 'Prise en Charge de Logic Pro X', 20000);
 SELECT add_milestone(3, 'Prise en charge de module 16 bits', 250000);
-SELECT add_milestone(4, 'Deux Morceau de plus dans l''Album', 60000);
-
--- ----------------------------
--- Records of projet
--- ----------------------------
-SELECT add_projet(2, 'Tranxen 400', 'VST Compatible avec Pro Tools, permet de moduler les pic, les poc mais aussi les pitch et les potch', '2019-02-15', '2019-05-23', 10000, 0, 50);
-SELECT add_projet(3, 'ChipWave', 'Logiciel de MAO taillé pour la création de musique 8 bits.', '2019-01-01', '2019-05-10', 200000, 0, 5);
-SELECT add_projet(4, 'Outrun Alpha', 'Back to The 80s !', '2019-01-30', '2019-05-01', 50000, 0, 15);
-SELECT add_projet(1, 'OnduLab X', 'Simulateur numérique d''effet de basse', '2018-12-31', '2019-05-26', 260000, 0, 10);
+SELECT add_milestone(4, 'Deux Morceau de plus dans l''Album', 20000);
+SELECT add_milestone(4, 'Une nouvelle cover édition deluxe', 60000);
 
 -- ----------------------------
 -- Records of reward
